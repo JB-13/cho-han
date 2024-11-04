@@ -1,13 +1,13 @@
 package properties;
 
-public class Client {
+public class Player {
     private String name;
     private String password;
     private Double balance;
     private Bet bet;
 
-    public Client(String name, String password, String balance, Bet bet) {}
-    public Client(String name, String password, Bet bet) {setBalance(1000.0);}
+    public Player(String name, String password, String balance, Bet bet) {}
+    public Player(String name, String password, Bet bet) {setBalance(1000.0);}
 
     public String getName() {return this.name;}
     public String getPassword() { return this.password;}
@@ -25,6 +25,10 @@ public class Client {
 
     public void betOdd(double amount) {
         this.bet = new Bet(amount,false, true,false);
+    }
+
+    public void betNumber(int number, double amount) {
+        this.bet = new Bet(amount, false, false, false, number);
     }
 
     public void skipRound() {
