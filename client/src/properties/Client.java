@@ -19,12 +19,20 @@ public class Client {
     public void setBalance(Double balance) { this.balance = balance;}
     public void setBet(Bet bet) { this.bet = bet;}
 
-    public void amountE(double amount) {
+    public void betEven(double amount) {
         this.bet = new Bet(amount,true, false,false);
     }
 
-    public void amountO(double amount) {
+    public void betOdd(double amount) {
         this.bet = new Bet(amount,false, true,false);
+    }
+
+    public void skipRound() {
+        this.bet = new Bet(0.0,false, false,true);
+    }
+
+    public void updateBalance(double amount) {
+        this.balance += amount;
     }
 
 }
