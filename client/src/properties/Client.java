@@ -1,12 +1,12 @@
 package properties;
 
-public class Properties {
+public class Client {
     private String name;
     private String password;
     private Double balance;
 
-    public Properties(String name, String password, String balance) {}
-    public Properties(String name, String password) {setBalance(1000.0);}
+    public Client(String name, String password, String balance) {}
+    public Client(String name, String password) {setBalance(1000.0);}
 
     public String getName() {return this.name;}
     public String getPassword() { return this.password;}
