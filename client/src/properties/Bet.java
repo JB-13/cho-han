@@ -6,7 +6,7 @@ public class Bet {
     private boolean odd = false ;
     private boolean skip = true;
 
-    public Bet(int amount, boolean even, boolean odd, boolean skip) {}
+    public Bet(double amount, boolean even, boolean odd, boolean skip) {}
 
     public double getAmount() {return this.amount;}
     public boolean isEven() {return this.even;}

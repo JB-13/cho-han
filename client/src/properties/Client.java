@@ -20,17 +20,11 @@ public class Client {
     public void setBet(Bet bet) { this.bet = bet;}
 
     public void amountE(double amount) {
-        this.bet.setAmount(amount);
-        this.bet.setEven(true);
-        this.bet.setOdd(false);
-        this.bet.setSkip(false);
+        this.bet = new Bet(amount,true, false,false);
     }
 
     public void amountO(double amount) {
-        this.bet.setAmount(amount);
-        this.bet.setOdd(true);
-        this.bet.setEven(false);
-        this.bet.setSkip(false);
+        this.bet = new Bet(amount,false, true,false);
     }
 
 }
