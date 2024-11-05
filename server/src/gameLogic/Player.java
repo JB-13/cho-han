@@ -1,49 +1,42 @@
 package gameLogic;
 
-import javax.xml.namespace.QName;
 
 public class Player {
-    private double balance;
     private String name;
     private String password;
-    private Actions action;
+    private Double balance;
+    private Bet bet;
 
-    public Player(double balance, String name, String password, Actions action) {
-        this.balance = balance;
-        this.name = name;
-        this.password = password;
-       // this.action = action;
+    public Player(String name, String password, String balance, Bet bet) {}
+    public Player(String name, String password, Bet bet) {setBalance(1000.0);}
+
+    public String getName() {return this.name;}
+    public String getPassword() { return this.password;}
+    public Double getBalance() { return this.balance;}
+    public Bet getBet() { return this.bet;}
+
+    public void setName(String name) { this.name = name;}
+    public void setPassword(String password) { this.password = password;}
+    public void setBalance(Double balance) { this.balance = balance;}
+    public void setBet(Bet bet) { this.bet = bet;}
+
+    public void betEven(double amount) {
+        this.bet = new Bet(amount,true, false,false);
     }
 
-    public double getBalance() {
-        return balance;
+    public void betOdd(double amount) {
+        this.bet = new Bet(amount,false, true,false);
     }
 
-    public void setBalance(double balance) {
-        this.balance = balance;
+    public void betNumber(int number, double amount) {
+        this.bet = new Bet(amount, false, false, false, number);
     }
 
-    public String getName() {
-        return name;
+    public void skipRound() {
+        this.bet = new Bet(0.0,false, false,true);
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Actions getAction() {
-        return action;
-    }
-
-    public void setAction(Actions action) {
-        this.action = action;
+    public void updateBalance(double amount) {
+        this.balance += amount;
     }
 }
