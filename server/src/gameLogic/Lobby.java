@@ -16,14 +16,12 @@ public class Lobby {
         players.add(player);
     }
 
+    public int getLobbySize() {
+        return players.size();
+    }
+
     public void connectPlayer (Player player) {
-        int maxPlayersInLobby = 5;
-        if (players.size() < maxPlayersInLobby) {
             players.add(player);
-        }
-        else {
-            new Lobby(player); // könnte noch geändert werden (logik für Spieler einer leeren Lobby zuweisen)
-        }
     }
 
     public void startGame() throws InterruptedException {
