@@ -7,28 +7,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Server {
-    private List<Lobby> Lobbies = new ArrayList<>();
-    private int maxPlayersInLobby = 5;
+    private static List<Lobby> Lobbies = new ArrayList<>();
+    private static int maxPlayersInLobby = 5;
 
     public static void main(String[] args) {
 
     }
 
 
-    public void assignLobby(Player player) {
-        int i = 0;
+    public static Lobby assignLobby(Player player) {
+        if (Lobbies.isEmpty()) {
+            Lobby newLobby = new Lobby();
+            Lobbies.add(newLobby);
+            newLobby.connectPlayer(player);
+            return newLobby; // Rückgabe der neu erstellten Lobby
+        }
         for (Lobby lobby : Lobbies) {
-            if (Lobbies.size() == i) { //alle lobbies sind voll, neue wird erstellt und Player hinzugefügt
-                Lobby lobby2 = new Lobby();
-                lobby2.connectPlayer(player);
-            }
-            else if(lobby.getLobbySize() < maxPlayersInLobby){ //freie lobby gefunden
+            if (lobby.getLobbySize() < maxPlayersInLobby) { // Freie Lobby gefunden
                 lobby.connectPlayer(player);
-                break;
-            } else {
-                i++;
+                return lobby; // Rückgabe der zugewiesenen Lobby
             }
         }
+        // Alle Lobbys sind voll, neue erstellen
+        Lobby newLobby = new Lobby();
+        Lobbies.add(newLobby);
+        newLobby.connectPlayer(player);
+        return newLobby; // Rückgabe der neu erstellten Lobby
     }
+
+
 
 }
