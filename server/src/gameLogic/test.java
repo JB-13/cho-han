@@ -15,10 +15,10 @@ public class test {
         lobby.connectPlayer(p4);
 
         System.out.println("Wie große ist die Lobby: " + lobby.getLobbySize());
-        System.out.println("Wie viele Punkte" + p1.getBalance());
-        System.out.println("Wie viele Punkte" + p2.getBalance());
-        System.out.println("Wie viele Punkte" + p3.getBalance());
-        System.out.println("Wie viele Punkte" + p4.getBalance());
+        System.out.println("Wie viele Punkte " + p1.getBalance());
+        System.out.println("Wie viele Punkte " + p2.getBalance());
+        System.out.println("Wie viele Punkte " + p3.getBalance());
+        System.out.println("Wie viele Punkte " + p4.getBalance());
 
         p1.betEven(100);
         p2.betOdd(100);
@@ -26,9 +26,9 @@ public class test {
         p4.skipRound();
 
         System.out.println("p1 " + p1.getBet().isEven());
-        System.out.println("p1 " + p2.getBet().isOdd());
-        System.out.println("p1 " + p3.getBet().getNumber());
-        System.out.println("p1 " + p4.getBet().isSkip());
+        System.out.println("p2 " + p2.getBet().isOdd());
+        System.out.println("p3 " + p3.getBet().getNumber());
+        System.out.println("p4 " + p4.getBet().isSkip());
 
         lobby.startGame();
 
