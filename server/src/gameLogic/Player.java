@@ -7,33 +7,85 @@ public class Player {
     private Double balance;
     private Bet bet;
 
-    public Player(String name, String password, String balance, Bet bet) {}
-    public Player(String name, String password, Bet bet) {setBalance(1000.0);}
+    public Player(String name, String password, Double balance) {
+        this.name = name;
+        this.password = password;
+        this.balance = balance;
+        this.bet = new Bet();
+    }
 
-    public String getName() {return this.name;}
-    public String getPassword() { return this.password;}
-    public Double getBalance() { return this.balance;}
-    public Bet getBet() { return this.bet;}
+    public Player(String name, String password) {
+        this.name = name;
+        this.password = password;
+        this.setBalance(1000.0);
+        this.bet = new Bet();
+    }
 
-    public void setName(String name) { this.name = name;}
-    public void setPassword(String password) { this.password = password;}
-    public void setBalance(Double balance) { this.balance = balance;}
-    public void setBet(Bet bet) { this.bet = bet;}
+    public String getName() {
+        return this.name;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public Double getBalance() {
+        return this.balance;
+    }
+
+    public Bet getBet() {
+        return this.bet;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
+
+    public void setBet(Bet bet) {
+        this.bet = bet;
+    }
 
     public void betEven(double amount) {
-        this.bet = new Bet(amount,true, false,false);
+        //this.bet = new Bet(amount, true, false, false);
+        this.bet.setAmount(amount);
+        this.bet.setEven(true);
+        this.bet.setOdd(false);
+        this.bet.setSkip(false);
+        this.bet.setNumber(-1);
     }
 
     public void betOdd(double amount) {
-        this.bet = new Bet(amount,false, true,false);
+        //this.bet = new Bet(amount, false, true, false);
+        this.bet.setAmount(amount);
+        this.bet.setEven(false);
+        this.bet.setOdd(true);
+        this.bet.setSkip(false);
     }
 
     public void betNumber(int number, double amount) {
-        this.bet = new Bet(amount, false, false, false, number);
+       // this.bet = new Bet(amount, false, false, false, number);
+        this.bet.setAmount(amount);
+        this.bet.setEven(false);
+        this.bet.setOdd(false);
+        this.bet.setSkip(false);
+        this.bet.setNumber(number);
     }
 
     public void skipRound() {
-        this.bet = new Bet(0.0,false, false,true);
+       // this.bet = new Bet(0.0, false, false, true);
+        this.bet.setAmount(0.0);
+        this.bet.setEven(false);
+        this.bet.setOdd(false);
+        this.bet.setSkip(true);
+        this.bet.setNumber(-1);
     }
 
     public void updateBalance(double amount) {
