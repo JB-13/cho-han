@@ -1,66 +1,40 @@
 package networkControllerServer;
 
+import networkControllerServer.marshalling.TCPReceive;
+import networkControllerServer.marshalling.TCPSend;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 
 public class TCPServer {
 
-    public static void main(String[] args) {
-
-        //Port bereitstellen und Socket öffnen
+    public static void main(String[] args) throws Exception {
 
         int port = 1234;
-        ServerSocket sock;
-        Socket connection;
-        try {
-            sock = new ServerSocket(port);
-            System.out.println ("Server hört auf TCP-Port: " + sock.getLocalPort());
-            System.out.println ("Warten auf Verbindungsaufbau");
-            connection = sock.accept ();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        ServerSocket socket = new ServerSocket (port);
+        System.out.println ("Server hört auf TCP-Port: " + socket.getLocalPort ());
+        System.out.println ("Warten auf Verbindungsaufbau");
 
-        try {
-            connection.setSoTimeout (0);
-        } catch (SocketException e) {
-            throw new RuntimeException(e);
-        }
+        Socket connection = socket.accept ();
 
-        InputStream in;
-        try {
-            in = connection.getInputStream();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+        InputStream in = connection.getInputStream();
+        OutputStream out = connection.getOutputStream();
         System.out.println ("Verbindungsaufbau hat statt gefunden");
 
-        //Auslesen der empfangenen Daten
-        int offset, readBytes = 0, currentLength, length = 3;
-        byte [] buf = new byte [10];
+        TCPReceive tcpRec = new TCPReceive (in);
+        TCPSend tcpSend = new TCPSend (out);
 
-        do {
-            offset = readBytes;
-            currentLength = length - readBytes;
-            try {
-                readBytes += in.read (buf, offset, currentLength);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        } while (readBytes < length);
-        System.out.print ("Es wurde empfangen: ");
-        for (int i = 0; i < length; i++) System.out.print ( (char) buf[i]);
+        System.out.println("Server sendet 42");
+        tcpSend.sendInt (42);
 
-        try {
-            connection.close ();
-            sock.close ();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        System.out.println("Server erhält ein int");
+        System.out.println(tcpRec.receiveInt ());
+        connection.close ();
+        socket.close ();
 
 
     }
