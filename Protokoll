@@ -1,0 +1,29 @@
+
+Player Actions (off server)
+===========================
+connect to server: CON
+===========================
+
+Player Action (on server)
+===========================
+odd: ODD | amount (double)
+even: EVE | amount (double)
+bet number: NUM | amount (double) | 2-12(int)
+skip: SKI
+quit: from sever QUI
+===========================
+
+Server Actions
+===========================
+is odd: IOD
+is even: IEV
+is number: INU | 2-12(int)
+new balance: BAL | amount (double)
+===========================
+
+
+Exception Handling
+===========================
+general error
+not enough balance
+too high bet amount
