@@ -1,9 +1,8 @@
 package networkControllerClient;
 
 
-import connection.Client;
-import networkControllerClient.marshalling.TCPReceive;
-import networkControllerClient.marshalling.TCPSend;
+import networkControllerServer.marshalling.TCPReceive;
+import networkControllerServer.marshalling.TCPSend;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -24,13 +23,13 @@ public class TCPClient {
         TCPSend tcpSend = new TCPSend (out);
         TCPReceive tcpRec = new TCPReceive (in);
 
-        System.out.println("client erhält");
+/*        System.out.println("client erhält");
         System.out.println( tcpRec.receiveInt ());
 
 
         System.out.println("Client sendet 692 und 69");
         tcpSend.sendInt(692);
-        tcpSend.sendInt(69);
+        tcpSend.sendInt(69);*/
         socket.close ();
     }
 

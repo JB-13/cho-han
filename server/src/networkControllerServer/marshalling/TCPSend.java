@@ -26,7 +26,31 @@ public class TCPSend {
 
 
     } // sendInt
-    public void sendString (String str) throws Exception{
 
-    } // sendString
+    public void sendCode (String code) throws Exception{
+        bbuf.clear();
+        String codeUppercase = code.toUpperCase();
+        char [] charCode = codeUppercase.toCharArray();
+        for (int i = 0; i < charCode.length; i++) {
+            bbuf.putChar(charCode[i]);
+            System.out.println(charCode[i]);
+        }
+        while (bbuf.hasRemaining()) {
+            out.write(bbuf.get());
+        }
+        out.flush();
+
+
+
+    }
+
+    public void sendCode (String code, double amount) throws Exception{
+        String codeUppercase = code.toUpperCase();
+    }
+
+
+    public void sendCode(String code, double amount, int die) throws Exception{
+        String codeUppercase = code.toUpperCase();
+    }
+
 }

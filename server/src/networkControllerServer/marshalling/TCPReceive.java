@@ -1,5 +1,7 @@
 package networkControllerServer.marshalling;
 
+import networkControllerServer.Message;
+
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
@@ -16,7 +18,9 @@ public class TCPReceive {
         bbuf = ByteBuffer.wrap(buffer);
     } // TCP_Receive
 
-    public int receiveInt ( ) throws Exception {
+
+
+/*    public int receiveInt ( ) throws Exception {
         System.out.println("ReceiveInt Methoden anfang");
         bbuf.clear();
         int bytesRead = 0;
@@ -35,10 +39,16 @@ public class TCPReceive {
         }
         return bbuf.getInt();
 
+    } // receiveInt*/
 
-    } // receiveInt
-    public String receiveString ( ) throws Exception{
-        return "macht noch nichts";
+    public Message receiveCode () throws Exception{
+        bbuf.clear();
+        readBytes = 0;
+        //TODO: lese alle gesendeten Bytes und konstruiere ein Message Object
+        return null;
+
+
     }
+
 }
 
