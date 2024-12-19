@@ -1,5 +1,4 @@
-package networkControllerServer.marshalling;
-
+package networkControllerClient.marshalling;
 
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -7,7 +6,6 @@ import java.nio.ByteBuffer;
 public class TCPReceive {
 
     InputStream in = null;
-    int offset, readBytes, currentLength, length;
     byte [] buffer;
     ByteBuffer bbuf;
     int bufferLength = 256;
@@ -118,5 +116,4 @@ public class TCPReceive {
 
 
 
-}
-
+}//TCPReceive

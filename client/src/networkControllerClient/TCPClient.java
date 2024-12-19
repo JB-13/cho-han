@@ -23,14 +23,22 @@ public class TCPClient {
         TCPSend tcpSend = new TCPSend (out);
         TCPReceive tcpRec = new TCPReceive (in);
 
-/*        System.out.println("client erhält");
-        System.out.println( tcpRec.receiveInt ());
+        socket.close();
+    }*/
 
+    public static boolean connect(){
+         int port = 1234;
+         InetAddress address = InetAddress.getByName ("127.0.0.1");
+         Socket socket = new Socket (address, port);
 
-        System.out.println("Client sendet 692 und 69");
-        tcpSend.sendInt(692);
-        tcpSend.sendInt(69);*/
-        socket.close ();
+        OutputStream out = socket.getOutputStream ( );
+        InputStream in = socket.getInputStream ( );
+        System.out.println ("Verbunden mit " + socket.getInetAddress ( ).toString () + ":" + socket.getPort ());
+
+        TCPSend tcpSend = new TCPSend (out);
+        TCPReceive tcpRec = new TCPReceive (in);
+
+        return true;
     }
 
 

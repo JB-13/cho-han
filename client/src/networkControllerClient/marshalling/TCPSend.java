@@ -1,4 +1,4 @@
-package networkControllerServer.marshalling;
+package networkControllerClient.marshalling;
 
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
@@ -53,8 +53,6 @@ public class TCPSend {
         bbuf.put(code.getBytes("UTF-8")); // Fügt die 3 Buchstaben ein
         bbuf.flip();
         writeBuffer();
-
-
 
     }
 
