@@ -18,8 +18,10 @@ public class Server {
     public static Lobby assignLobby(Player player) {
         if (Lobbies.isEmpty()) {
             Lobby newLobby = new Lobby();
+            Thread lobbyThread = new Thread(newLobby);
             Lobbies.add(newLobby);
             newLobby.connectPlayer(player);
+            lobbyThread.start();
             return newLobby; // Rückgabe der neu erstellten Lobby
         }
         for (Lobby lobby : Lobbies) {
@@ -30,8 +32,10 @@ public class Server {
         }
         // Alle Lobbys sind voll, neue erstellen
         Lobby newLobby = new Lobby();
+        Thread lobbyThread = new Thread(newLobby);
         Lobbies.add(newLobby);
         newLobby.connectPlayer(player);
+        lobbyThread.start();
         return newLobby; // Rückgabe der neu erstellten Lobby
     }
 

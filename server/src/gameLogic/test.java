@@ -53,7 +53,7 @@ public class test {
 
         System.out.println("Wie groß ist die Lobby: " + assignedLobbies.get(0).getLobbySize());
         System.out.println("Wie groß ist die Lobby2: " + assignedLobbies.get(1).getLobbySize());
-        System.out.println("Wie groß ist die Lobby2: " + assignedLobbies.get(2).getLobbySize());
+        System.out.println("Wie groß ist die Lobby3: " + assignedLobbies.get(2).getLobbySize());
         System.out.println("Wie viele Punkte hat p1 " + p1.getBalance());
         System.out.println("Wie viele Punkte hat p12 " + p12.getBalance());
 
@@ -86,7 +86,8 @@ public class test {
         System.out.println();
 
 
-        assignedLobbies.get(0).startGame();
+
+        Thread.sleep(16000);
 
         System.out.println("Wie viele Punkte" + p1.getBalance());
         System.out.println("Wie viele Punkte" + p2.getBalance());
@@ -96,7 +97,7 @@ public class test {
 
         System.out.println();
 
-        assignedLobbies.get(1).startGame();
+
         System.out.println("Wie viele Punkte" + p6.getBalance());
         System.out.println("Wie viele Punkte" + p7.getBalance());
         System.out.println("Wie viele Punkte" + p8.getBalance());
@@ -105,7 +106,7 @@ public class test {
 
         System.out.println();
 
-        assignedLobbies.get(2).startGame();
+
         System.out.println("Wie viele Punkte" + p11.getBalance());
         System.out.println("Wie viele Punkte" + p12.getBalance());
 

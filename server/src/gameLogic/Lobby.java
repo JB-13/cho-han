@@ -3,10 +3,11 @@ package gameLogic;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Lobby {
+public class Lobby implements Runnable {
 
     private List<Player> players = new ArrayList<>();
     private Dealer dealer = new Dealer();
+    private boolean active = true;
 
     public Lobby() {
 
@@ -46,6 +47,23 @@ public class Lobby {
                 player.updateBalance(-bet.getAmount());
             }
         }
+    }
+
+    public void run() {
+        while (active) {
+            try {
+                startGame();
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                System.out.println("Lobby wurde unterbrochen");
+                Thread.currentThread().interrupt();
+                break;
+            }
+        }
+    }
+
+    public void stopLobby() {
+        active = false;
     }
 
 }
