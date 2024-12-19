@@ -1,20 +1,11 @@
 package gameLogic;
 
-import connection.Server;
 
-import java.util.ArrayList;
-import java.util.List;
+import static connection.Server.*;
 
 public class test {
 
-    private static List<Lobby> assignedLobbies = new ArrayList<>();
 
-    private static void assignAndAddLobby(Player player) {
-        Lobby lobby = Server.assignLobby(player);
-        if (!assignedLobbies.contains(lobby)) {
-            assignedLobbies.add(lobby);
-        }
-    }
 
 
     public static void main(String[] args) throws InterruptedException {
@@ -33,27 +24,27 @@ public class test {
 
 
         // Speichere die Lobbys in einer Liste, um darauf zugreifen zu können
-        System.out.println(assignedLobbies.size());
-        assignAndAddLobby(p1);
-        assignAndAddLobby(p2);
-        assignAndAddLobby(p3);
-        assignAndAddLobby(p4);
-        assignAndAddLobby(p5);
-        System.out.println(assignedLobbies.size());
-        assignAndAddLobby(p6);
-        assignAndAddLobby(p7);
-        assignAndAddLobby(p8);
-        assignAndAddLobby(p9);
-        assignAndAddLobby(p10);
-        System.out.println(assignedLobbies.size());
-        assignAndAddLobby(p11);
-        assignAndAddLobby(p12);
-        System.out.println(assignedLobbies.size());
+        System.out.println(Lobbies.size());
+        assignLobby(p1);
+        assignLobby(p2);
+        assignLobby(p3);
+        assignLobby(p4);
+        assignLobby(p5);
+        System.out.println(Lobbies.size());
+        assignLobby(p6);
+        assignLobby(p7);
+        assignLobby(p8);
+        assignLobby(p9);
+        assignLobby(p10);
+        System.out.println(Lobbies.size());
+        assignLobby(p11);
+        assignLobby(p12);
+        System.out.println(Lobbies.size());
 
 
-        System.out.println("Wie groß ist die Lobby: " + assignedLobbies.get(0).getLobbySize());
-        System.out.println("Wie groß ist die Lobby2: " + assignedLobbies.get(1).getLobbySize());
-        System.out.println("Wie groß ist die Lobby3: " + assignedLobbies.get(2).getLobbySize());
+        System.out.println("Wie groß ist die Lobby: " + Lobbies.get(0).getLobbySize());
+        System.out.println("Wie groß ist die Lobby2: " + Lobbies.get(1).getLobbySize());
+        System.out.println("Wie groß ist die Lobby3: " + Lobbies.get(2).getLobbySize());
         System.out.println("Wie viele Punkte hat p1 " + p1.getBalance());
         System.out.println("Wie viele Punkte hat p12 " + p12.getBalance());
 
