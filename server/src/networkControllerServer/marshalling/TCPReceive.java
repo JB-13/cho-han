@@ -7,7 +7,6 @@ import java.nio.ByteBuffer;
 public class TCPReceive {
 
     InputStream in = null;
-    int offset, readBytes, currentLength, length;
     byte [] buffer;
     ByteBuffer bbuf;
     int bufferLength = 256;
@@ -118,5 +117,5 @@ public class TCPReceive {
 
 
 
-}
+}//TCPReceive
 

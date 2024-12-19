@@ -28,12 +28,10 @@ public class TCPServer {
         TCPReceive tcpRec = new TCPReceive (in);
         TCPSend tcpSend = new TCPSend (out);
 
-/*        System.out.println("Server sendet 42");
-        tcpSend.sendInt (42);
-
-        System.out.println("Server erhält ein int");
-        System.out.println(tcpRec.receiveInt ());*/
-        tcpSend.sendCode("abs");
+        System.out.println(tcpRec.receiveCode());
+        System.out.println(tcpRec.receiveDouble());
+        System.out.println(tcpRec.receiveInt());
+        System.out.println(tcpRec.receiveString());
         connection.close ();
         socket.close ();
 

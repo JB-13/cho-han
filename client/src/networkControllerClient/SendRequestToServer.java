@@ -1,27 +1,30 @@
 package networkControllerClient;
 
-
-
 import java.util.Scanner;
 
 public class SendRequestToServer {
     static Scanner sc = new Scanner(System.in);
-
+    public  TCPClient tcpClient = new TCPClient();
     public static boolean connectToServer(){ //boolean weil, man wissen soll, ob es geklappt hat
 /*        Thread thread = new Thread(tcpClient);
         thread.start();*/
 
-        TCPClient.connect();
+        try {
+            tcpClient.connect();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         return true;
     }
 
 
-    public static void betOdd(){
+    public static void betOdd() throws Exception {
         System.out.println("how many points are you betting?");
         double amount = sc.nextDouble();
         //TODO: überprüfen, ob der Client überhaupt so viele Punkte hat.
-        tcpSend.sendCode("ODD");
+        tcpClient.tcpSend.sendCode("ODD");
+        sendCode("ODD");
         sendDouble(amount);
 
     }

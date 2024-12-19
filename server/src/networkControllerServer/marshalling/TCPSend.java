@@ -54,8 +54,6 @@ public class TCPSend {
         bbuf.flip();
         writeBuffer();
 
-
-
     }
 
     private void writeBuffer() throws Exception {
