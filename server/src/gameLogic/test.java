@@ -1,7 +1,7 @@
 package gameLogic;
 
 
-import static connection.Server.*;
+import static gameLogic.Lobby.*;
 
 public class test {
 

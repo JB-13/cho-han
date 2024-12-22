@@ -1,35 +1,58 @@
 package networkControllerServer;
 
+
+import gameLogic.Lobby;
+import gameLogic.Player;
+
+import static networkControllerServer.TCPServer.tcpRec;
+
 public class HandleRequestFromClient {
 
-    public void handleRequest(){
-        //String code = receiveCode();
-        String code = ""; //Platzhalter
-        switch (code){
+    private Player player; // Der aktuelle Spieler
+    private Lobby lobby;   // Die zugewiesene Lobby
+
+    public HandleRequestFromClient(Player player) {
+        this.player = player;
+        this.lobby = Lobby.assignLobby(player); // Spieler einer Lobby zuweisen
+    }
+
+    public void handleRequest() throws Exception {
+        String code = tcpRec.receiveCode();
+        switch (code) {
             case "ODD":
-                //double amount= receiveDouble();
-                //TODO: gamelogic bet odd
+                double oddAmount = tcpRec.receiveDouble();
+                player.betOdd(oddAmount);
                 break;
+
             case "EVE":
-                //double amount= receiveDouble();
-                //TODO: gamelogic bet even
+                double evenAmount = tcpRec.receiveDouble();
+                player.betEven(evenAmount);
                 break;
+
             case "NUM":
-                //double amount= receiveDouble();
-                //int number = receiveInt()
-                //TODO: gamelogic bet number
+                double numAmount = tcpRec.receiveDouble();
+                int number = tcpRec.receiveInt();
+                if (number < 2 || number > 12) {
+                    System.out.println("Ungültige Augenzahl: " + number);
+                    player.skipRound();
+                } else {
+                    player.betNumber(number, numAmount);
+                }
                 break;
+
             case "SKI":
-                //TODO: gamelogic skip
+                player.skipRound();
+                break;
+
             case "QUI":
+                player.skipRound(); // Spieler setzt aus
+                // lobby.stopLobby();  // Lobby beenden, falls nötig
                 break;
+
             default:
-                //TODO: gamelogic skip
+                System.out.println("Unbekannter Code: " + code);
+                player.skipRound();
                 break;
-
-
-
-
         }
     }
 }

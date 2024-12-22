@@ -1,26 +1,30 @@
 package networkControllerClient;
 
+import static networkControllerClient.TCPClient.tcpRec;
+
 public class HandleRequestFromServer {
 
-    public void handleRequest(){
-        //String code = receiveCode();
-        String code = ""; //Platzhalter
+    public static void handleRequest() throws Exception {
+        String code = tcpRec.receiveCode();
         switch (code){
             case "IOD":
                 System.out.println("odd die count"); break;
             case "IEV":
                 System.out.println("even die count"); break;
             case "INU":
-                //int number = receiveInt();
-                System.out.println("die count is " /*+ number*/); break;
+                int number = tcpRec.receiveInt();
+                System.out.println("die count is " + number); break;
             case "BAL":
-                //double balance = receiveDouble();
-                System.out.println("your balance is " /*+ balance*/); break;
-
-
-
+                double balance = tcpRec.receiveDouble();
+                System.out.println("your balance is " + balance); break;
 
         }
+    }
+
+    public static void handleRoundOutcome()  throws Exception{
+        handleRequest();
+        handleRequest();
+        handleRequest();
     }
 }
 /*

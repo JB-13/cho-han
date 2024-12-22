@@ -1,8 +1,8 @@
 package networkControllerClient;
 
 
-import networkControllerServer.marshalling.TCPReceive;
-import networkControllerServer.marshalling.TCPSend;
+import networkControllerClient.marshalling.TCPReceive;
+import networkControllerClient.marshalling.TCPSend;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +14,7 @@ import java.net.UnknownHostException;
 public class TCPClient /*implements Runnable*/ {
     public static  TCPSend tcpSend  = null;
     public static  TCPReceive tcpRec  = null;
-
+    public static Socket socket = null;
 /*    @Override
     public void run() {
         int port = 1234;
@@ -72,7 +72,7 @@ public class TCPClient /*implements Runnable*/ {
     public boolean connect()throws Exception{
          int port = 1234;
          InetAddress address = InetAddress.getByName ("127.0.0.1");
-         Socket socket = new Socket (address, port);
+         socket = new Socket (address, port);
 
         OutputStream out = socket.getOutputStream ( );
         InputStream in = socket.getInputStream ( );
@@ -82,6 +82,12 @@ public class TCPClient /*implements Runnable*/ {
         tcpRec = new TCPReceive (in);
 //TODO: bei connect muss dieser Code passieren und tcpSend und tcpRec muss öffentlich sichtbar sein
         return true;
+    }
+
+    public void disconnect() throws Exception {
+        if (socket != null && !socket.isClosed()) {
+            socket.close();
+        }
     }
 
 

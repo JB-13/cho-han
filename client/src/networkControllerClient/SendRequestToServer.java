@@ -27,6 +27,8 @@ public class SendRequestToServer {
         //TODO: überprüfen, ob der Client überhaupt so viele Punkte hat.
         tcpSend.sendCode("ODD");
         tcpSend.sendDouble(amount);
+        HandleRequestFromServer.handleRoundOutcome();
+
 
     }
 
@@ -36,6 +38,7 @@ public class SendRequestToServer {
         //TODO: überprüfen, ob der Client überhaupt so viele Punkte hat.
         tcpSend.sendCode("EVE");
         tcpSend.sendDouble(amount);
+        HandleRequestFromServer.handleRoundOutcome();
     }
     public static void betNum() throws Exception {
         System.out.println("how many points are you betting");
@@ -50,16 +53,18 @@ public class SendRequestToServer {
         tcpSend.sendCode("NUM");
         tcpSend.sendDouble(amount);
         tcpSend.sendInt(number);
+        HandleRequestFromServer.handleRoundOutcome();
 
     }
     public static void skipRound() throws Exception {
         tcpSend.sendCode("SKI");
+        HandleRequestFromServer.handleRoundOutcome();
 
     }
 
     public static void quitLobby() throws Exception {
         tcpSend.sendCode("QUI");
-
+        tcpClient.disconnect();
     }
 
 }

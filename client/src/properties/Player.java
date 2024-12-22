@@ -1,5 +1,7 @@
 package properties;
 
+import gameLogic.Lobby;
+
 public class Player {
     private String name;
     private String password;
@@ -20,20 +22,21 @@ public class Player {
     public void setBet(Bet bet) { this.bet = bet;}
 
     public void betEven(double amount) {
-        this.bet = new Bet(amount,true, false,false);
+            this.bet = new Bet(amount, true, false, false);
     }
 
     public void betOdd(double amount) {
-        this.bet = new Bet(amount,false, true,false);
+            this.bet = new Bet(amount, false, true, false);
     }
 
     public void betNumber(int number, double amount) {
-        this.bet = new Bet(amount, false, false, false, number);
+            this.bet = new Bet(amount, false, false, false, number);
     }
 
     public void skipRound() {
-        this.bet = new Bet(0.0,false, false,true);
+            this.bet = new Bet(0.0, false, false, true);
     }
+
 
     public void updateBalance(double amount) {
         this.balance += amount;

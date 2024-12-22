@@ -54,38 +54,34 @@ public class Player {
     }
 
     public void betEven(double amount) {
-        //this.bet = new Bet(amount, true, false, false);
-        this.bet.setAmount(amount);
-        this.bet.setEven(true);
-        this.bet.setOdd(false);
-        this.bet.setSkip(false);
-        this.bet.setNumber(-1);
+            this.bet.setAmount(amount);
+            this.bet.setEven(true);
+            this.bet.setOdd(false);
+            this.bet.setSkip(false);
+            this.bet.setNumber(-1);
     }
 
     public void betOdd(double amount) {
-        //this.bet = new Bet(amount, false, true, false);
-        this.bet.setAmount(amount);
-        this.bet.setEven(false);
-        this.bet.setOdd(true);
-        this.bet.setSkip(false);
+            this.bet.setAmount(amount);
+            this.bet.setEven(false);
+            this.bet.setOdd(true);
+            this.bet.setSkip(false);
     }
 
     public void betNumber(int number, double amount) {
-       // this.bet = new Bet(amount, false, false, false, number);
-        this.bet.setAmount(amount);
-        this.bet.setEven(false);
-        this.bet.setOdd(false);
-        this.bet.setSkip(false);
-        this.bet.setNumber(number);
+            this.bet.setAmount(amount);
+            this.bet.setEven(false);
+            this.bet.setOdd(false);
+            this.bet.setSkip(false);
+            this.bet.setNumber(number);
     }
 
     public void skipRound() {
-       // this.bet = new Bet(0.0, false, false, true);
-        this.bet.setAmount(0.0);
-        this.bet.setEven(false);
-        this.bet.setOdd(false);
-        this.bet.setSkip(true);
-        this.bet.setNumber(-1);
+            this.bet.setAmount(0.0);
+            this.bet.setEven(false);
+            this.bet.setOdd(false);
+            this.bet.setSkip(true);
+            this.bet.setNumber(-1);
     }
 
     public void updateBalance(double amount) {

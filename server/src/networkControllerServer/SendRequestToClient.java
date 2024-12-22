@@ -1,20 +1,30 @@
 package networkControllerServer;
 
+import gameLogic.Dealer;
+import gameLogic.Player;
+
+import static networkControllerServer.TCPServer.tcpSend;
+
 public class SendRequestToClient {
 
-    public void sendRoundOutcome (){
-        //TODO: if die count is odd{
-        //sendCode("IOD");
-        //} else{
-        //sendCode("IEV");}
+    private Dealer dealer;
 
-        //sendCode("INU");
-        //sendInt(dieNumber);
+    public SendRequestToClient(Dealer dealer) {
+        this.dealer = dealer;
+    }
 
-        //sendCode("BAL");
-        //sendDouble(balance)
+    public void sendRoundOutcome(Player player, int rolledNumber) throws Exception {
+        if (dealer.isOdd(rolledNumber)) {
+            tcpSend.sendCode("IOD");
+        } else if (dealer.isEven(rolledNumber)) {
+            tcpSend.sendCode("IEV");
+        }
 
+        tcpSend.sendCode("INU");
+        tcpSend.sendInt(rolledNumber);
 
+        tcpSend.sendCode("BAL");
+        tcpSend.sendDouble(player.getBalance());
     }
 }
 
