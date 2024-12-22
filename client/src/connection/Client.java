@@ -36,7 +36,7 @@ public class Client {
 
     }
 
-    public static void gameLoopView(){
+    public static void gameLoopView() throws Exception {
         gameloop = true; //setze auf true falls nicht geschehen
         // if methoden aufruf zum connecten = true
         // else retrun;
@@ -51,16 +51,16 @@ public class Client {
             option = sc.next();
             switch (option){
                 case "1":
-                    System.out.println("methoden aufruf für bet odd"); break;
+                    SendRequestToServer.betOdd(); break;
                 case "2":
-                    System.out.println("methoden aufruf für bet even"); break;
+                    SendRequestToServer.betEven(); break;
                 case "3":
                     SendRequestToServer.betNum(); break;
                 case "4":
                     SendRequestToServer.skipRound(); break;
                 case "5":
-                    System.out.println("methoden aufruf exit lobby"); gameloop = false; break;
-                default: System.out.println("methoden aufruf für skip"); break;
+                    SendRequestToServer.quitLobby(); gameloop = false; break;
+                default: SendRequestToServer.skipRound(); break;
 
 
             }

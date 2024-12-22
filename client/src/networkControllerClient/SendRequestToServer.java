@@ -1,6 +1,8 @@
 package networkControllerClient;
 
 import java.util.Scanner;
+import static networkControllerClient.TCPClient.tcpSend;
+
 
 public class SendRequestToServer {
     static Scanner sc = new Scanner(System.in);
@@ -23,9 +25,8 @@ public class SendRequestToServer {
         System.out.println("how many points are you betting?");
         double amount = sc.nextDouble();
         //TODO: überprüfen, ob der Client überhaupt so viele Punkte hat.
-        tcpClient.tcpSend.sendCode("ODD");
-        sendCode("ODD");
-        sendDouble(amount);
+        tcpSend.sendCode("ODD");
+        tcpSend.sendDouble(amount);
 
     }
 

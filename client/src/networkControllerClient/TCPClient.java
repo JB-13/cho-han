@@ -12,8 +12,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class TCPClient /*implements Runnable*/ {
-    public  TCPSend tcpSend  = null;
-    public  TCPReceive tcpRec  = null;
+    public static  TCPSend tcpSend  = null;
+    public static  TCPReceive tcpRec  = null;
 
 /*    @Override
     public void run() {
