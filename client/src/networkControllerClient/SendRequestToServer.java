@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class SendRequestToServer {
     static Scanner sc = new Scanner(System.in);
-    public  TCPClient tcpClient = new TCPClient();
+    public static TCPClient tcpClient = new TCPClient();
     public static boolean connectToServer(){ //boolean weil, man wissen soll, ob es geklappt hat
 /*        Thread thread = new Thread(tcpClient);
         thread.start();*/
@@ -29,14 +29,14 @@ public class SendRequestToServer {
 
     }
 
-    public static void betEven(){
+    public static void betEven() throws Exception {
         System.out.println("how many points are you betting?");
         double amount = sc.nextDouble();
         //TODO: überprüfen, ob der Client überhaupt so viele Punkte hat.
-        sendCode("EVE");
-        sendDouble(amount);
+        tcpSend.sendCode("EVE");
+        tcpSend.sendDouble(amount);
     }
-    public static void betNum(){
+    public static void betNum() throws Exception {
         System.out.println("how many points are you betting");
         double amount = sc.nextDouble();
         //TODO: überprüfen, ob der Client überhaupt so viele Punkte hat.
@@ -46,18 +46,18 @@ public class SendRequestToServer {
             System.out.println("not a valid die count. Abort player action");
         }
 
-        sendCode("NUM");
-        sendDouble(amount);
-        sendInt();
+        tcpSend.sendCode("NUM");
+        tcpSend.sendDouble(amount);
+        tcpSend.sendInt(number);
 
     }
-    public static void skipRound(){
-        sendCode("SKI");
+    public static void skipRound() throws Exception {
+        tcpSend.sendCode("SKI");
 
     }
 
-    public static void quitLobby(){
-        sendCode("QUI");
+    public static void quitLobby() throws Exception {
+        tcpSend.sendCode("QUI");
 
     }
 

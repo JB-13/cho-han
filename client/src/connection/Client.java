@@ -10,7 +10,7 @@ public class Client {
     static String option = "";
     static Scanner sc = new Scanner(System.in);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         //aüßere Schleife für den ersten Screen
         while (entrance){
@@ -55,9 +55,9 @@ public class Client {
                 case "2":
                     System.out.println("methoden aufruf für bet even"); break;
                 case "3":
-                    System.out.println("methoden aufruf für bet die count"); break;
+                    SendRequestToServer.betNum(); break;
                 case "4":
-                    System.out.println("methoden aufruf für skip"); break;
+                    SendRequestToServer.skipRound(); break;
                 case "5":
                     System.out.println("methoden aufruf exit lobby"); gameloop = false; break;
                 default: System.out.println("methoden aufruf für skip"); break;

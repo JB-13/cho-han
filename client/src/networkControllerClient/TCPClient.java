@@ -78,8 +78,8 @@ public class TCPClient /*implements Runnable*/ {
         InputStream in = socket.getInputStream ( );
         System.out.println ("Verbunden mit " + socket.getInetAddress ( ).toString () + ":" + socket.getPort ());
 
-        TCPSend tcpSend = new TCPSend (out);
-        TCPReceive tcpRec = new TCPReceive (in);
+        tcpSend = new TCPSend (out);
+        tcpRec = new TCPReceive (in);
 //TODO: bei connect muss dieser Code passieren und tcpSend und tcpRec muss öffentlich sichtbar sein
         return true;
     }
