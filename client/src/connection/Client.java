@@ -48,6 +48,7 @@ public class Client {
             System.out.println("3) bet die count");
             System.out.println("4) skip round");
             System.out.println("5) exit lobby");
+            System.out.println();
             option = sc.next();
             switch (option){
                 case "1":
@@ -60,7 +61,8 @@ public class Client {
                     SendRequestToServer.skipRound(); break;
                 case "5":
                     SendRequestToServer.quitLobby(); gameloop = false; break;
-                default: SendRequestToServer.skipRound(); break;
+                default:
+                    System.out.println("ungültige Option");/* SendRequestToServer.skipRound(); */break;
 
 
             }

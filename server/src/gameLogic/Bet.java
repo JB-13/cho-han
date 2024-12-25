@@ -19,4 +19,6 @@ public class Bet {
     public void setSkip(boolean skip) {this.skip = skip;}
     public void setNumber(int number) {this.number = number;}
 
+
+
 }

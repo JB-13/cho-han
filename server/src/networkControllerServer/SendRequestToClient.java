@@ -14,6 +14,7 @@ public class SendRequestToClient {
     }
 
     public void sendRoundOutcome(Player player, int rolledNumber) throws Exception {
+        tcpSend.sendString("your bet is " + player.getBet());
         if (dealer.isOdd(rolledNumber)) {
             tcpSend.sendCode("IOD");
         } else if (dealer.isEven(rolledNumber)) {

@@ -12,13 +12,13 @@ public class TCPReceive {
 
     public TCPReceive (InputStream in) {
         this.in = in;
-        buffer = new byte [bufferLength];
-        bbuf = ByteBuffer.wrap(buffer);
+       // buffer = new byte [bufferLength];
+       // bbuf = ByteBuffer.wrap(buffer);
     } // TCP_Receive
 
 
 
-    private void fillBuffer(int size) throws Exception {
+/*    private void fillBuffer(int size) throws Exception {
         bbuf.clear();
         int bytesRead = 0;
         while (bytesRead < size) {
@@ -29,7 +29,7 @@ public class TCPReceive {
             bytesRead += result;
         }
         bbuf.flip();
-    }
+    }*/
 
 
 

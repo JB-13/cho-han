@@ -11,7 +11,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class TCPClient /*implements Runnable*/ {
+public class TCPClient implements Runnable {
     public static  TCPSend tcpSend  = null;
     public static  TCPReceive tcpRec  = null;
     public static Socket socket = null;
@@ -69,6 +69,19 @@ public class TCPClient /*implements Runnable*/ {
         socket.close();
     }*/
 
+    @Override
+public void run() {
+        while(true){
+            try {
+                HandleRequestFromServer.handleRequest();
+               // Thread.sleep(100);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+
     public boolean connect()throws Exception{
          int port = 1234;
          InetAddress address = InetAddress.getByName ("127.0.0.1");
@@ -80,6 +93,8 @@ public class TCPClient /*implements Runnable*/ {
 
         tcpSend = new TCPSend (out);
         tcpRec = new TCPReceive (in);
+        Thread handler = new Thread(new TCPClient());
+        handler.start();
 //TODO: bei connect muss dieser Code passieren und tcpSend und tcpRec muss öffentlich sichtbar sein
         return true;
     }

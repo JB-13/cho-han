@@ -12,6 +12,7 @@ public class Lobby implements Runnable {
     private boolean active = true;
     public static List<Lobby> Lobbies = new ArrayList<>();
     private static int maxPlayersInLobby = 5;
+    private SendRequestToClient sender = new SendRequestToClient(dealer);
 
     public Lobby() {
 
@@ -26,7 +27,11 @@ public class Lobby implements Runnable {
     }
 
     public void connectPlayer (Player player) {
+        if (!players.contains(player)) { // Prüfe, ob der Spieler bereits in der Liste ist
             players.add(player);
+        } else {
+            System.out.println("Player " + player.getName() + " ist bereits in der Lobby.");
+        }
     }
 
 
@@ -56,8 +61,7 @@ public class Lobby implements Runnable {
     public void startGame() throws InterruptedException {
         Thread.sleep(15000); // Wartezeit für Wetten
         int number = dealer.rollDice();
-        SendRequestToClient sender = new SendRequestToClient(dealer);
-        for (Player player : players) { //TODO: Player wird beim assignen zweimal in die Liste hinzugefügt
+        for (Player player : players) {
            // System.out.println(player.getName());
             Bet bet = player.getBet();
             System.out.println("hol spieler Bet");
@@ -66,7 +70,7 @@ public class Lobby implements Runnable {
             if (bet.isSkip()) {
                 System.out.println("bet is skipped");
                 try {
-                    sender.sendRoundOutcome(player, number); // TODO: muss da amount hin?
+                    sender.sendRoundOutcome(player, number);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -76,27 +80,33 @@ public class Lobby implements Runnable {
             if ((bet.isEven() && dealer.isEven(number)) || (bet.isOdd() && dealer.isOdd(number))) {
                 // Spieler gewinnt bei "Even" oder "Odd", erhält Gewinn
                 player.updateBalance(bet.getAmount());
-                //System.out.println("update balance");
+                System.out.println("gewettet: " + bet.getAmount());
             } else if (bet.getNumber() == number) {
                 // Spieler gewinnt bei spezifischer Augenzahl, erhält doppelten Gewinn
                 player.updateBalance(bet.getAmount() * 2);
+                System.out.println("gewettet: " + bet.getAmount());
                // System.out.println("check die number");
 
             } else {
                 // Spieler verliert, Einsatz wird abgezogen
                 player.updateBalance(-bet.getAmount());
             }
-           // System.out.println("vor dem Try Block");
+
+            player.skipRound(); // nach dem Wetten soll der Player auf den Default gesetzt werden
+
+            // System.out.println("vor dem Try Block");
             // Ergebnisse an den Spieler senden
             try {
                // System.out.println("information wird an spieler gesendet");
-                sender.sendRoundOutcome(player, number); //TODO: der buffer muss beim Client regelmäßig geleert werden
+                sender.sendRoundOutcome(player, number); //TODO: der buffer muss beim Client regelmäßig geleert werden | Senden der Rundeninformation nur beim Mitmachen
+                //TODO: Maybe statt einen RundenTimer a
             } catch (Exception e) {
                 System.out.println("Fehler beim Senden der Ergebnisse an Spieler " + player.getName());
             }
 
         }
     }
+
 
     public void run() {
         while (active) {
