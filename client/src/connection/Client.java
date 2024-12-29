@@ -42,13 +42,6 @@ public class Client {
         // else retrun;
 
         while (gameloop){ //zweite schleife für das Spiel selbst
-            System.out.println("choose your option by inputing a number");
-            System.out.println("1) bet odd");
-            System.out.println("2) bet even");
-            System.out.println("3) bet die count");
-            System.out.println("4) skip round");
-            System.out.println("5) exit lobby");
-            System.out.println();
             option = sc.next();
             switch (option){
                 case "1":

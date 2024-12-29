@@ -26,7 +26,7 @@ public class Lobby implements Runnable {
         return players.size();
     }
 
-    public void connectPlayer (Player player) {
+    public synchronized void connectPlayer (Player player) {
         if (!players.contains(player)) { // Prüfe, ob der Spieler bereits in der Liste ist
             players.add(player);
         } else {
@@ -98,8 +98,7 @@ public class Lobby implements Runnable {
             // Ergebnisse an den Spieler senden
             try {
                // System.out.println("information wird an spieler gesendet");
-                sender.sendRoundOutcome(player, number); //TODO: der buffer muss beim Client regelmäßig geleert werden | Senden der Rundeninformation nur beim Mitmachen
-                //TODO: Maybe statt einen RundenTimer a
+                sender.sendRoundOutcome(player, number);
             } catch (Exception e) {
                 System.out.println("Fehler beim Senden der Ergebnisse an Spieler " + player.getName());
             }
