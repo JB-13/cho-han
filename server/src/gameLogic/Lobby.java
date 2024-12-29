@@ -90,6 +90,7 @@ public class Lobby implements Runnable {
             } else {
                 // Spieler verliert, Einsatz wird abgezogen
                 player.updateBalance(-bet.getAmount());
+                System.out.println("gewettet: " + bet.getAmount());
             }
 
             player.skipRound(); // nach dem Wetten soll der Player auf den Default gesetzt werden

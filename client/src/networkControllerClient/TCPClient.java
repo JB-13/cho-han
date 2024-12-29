@@ -73,15 +73,9 @@ public class TCPClient implements Runnable {
 
     @Override
 public void run() {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         while(true){
             try {
                 HandleRequestFromServer.handleRequest();
-                Thread.sleep(100);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

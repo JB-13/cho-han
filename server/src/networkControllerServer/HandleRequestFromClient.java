@@ -3,7 +3,7 @@ package networkControllerServer;
 
 import gameLogic.Lobby;
 import gameLogic.Player;
-import networkControllerServer.marshalling.TCPReceive;
+
 
 
 
@@ -17,22 +17,22 @@ public class HandleRequestFromClient {
         this.lobby = Lobby.assignLobby(player); // Spieler einer Lobby zuweisen
     }
 
-    public void handleRequest(TCPReceive tcpRec) throws Exception {
-        String code = tcpRec.receiveCode();
+    public void handleRequest(TCPServer server) throws Exception {
+        String code = server.getTcpRec().receiveCode();
         switch (code) {
             case "ODD":
-                double oddAmount = tcpRec.receiveDouble();
+                double oddAmount = server.getTcpRec().receiveDouble();
                 player.betOdd(oddAmount);
                 break;
 
             case "EVE":
-                double evenAmount = tcpRec.receiveDouble();
+                double evenAmount = server.getTcpRec().receiveDouble();
                 player.betEven(evenAmount);
                 break;
 
             case "NUM":
-                double numAmount = tcpRec.receiveDouble();
-                int number = tcpRec.receiveInt();
+                double numAmount = server.getTcpRec().receiveDouble();
+                int number = server.getTcpRec().receiveInt();
                 if (number < 2 || number > 12) {
                     System.out.println("Ungültige Augenzahl: " + number);
                     player.skipRound();
@@ -46,7 +46,8 @@ public class HandleRequestFromClient {
                 break;
 
             case "QUI":
-                player.skipRound(); // Spieler setzt aus
+                player.skipRound();
+                // Spieler setzt aus
                 // lobby.stopLobby();  // Lobby beenden, falls nötig
                 break;
 

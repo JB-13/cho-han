@@ -51,8 +51,7 @@ public class TCPServer implements Runnable {
 
                 HandleRequestFromClient handler = new HandleRequestFromClient(p1);
                 while (true){
-                    handler.handleRequest(tcpRec);
-                    Thread.sleep(3000);
+                    handler.handleRequest(this);
 
                 }
             }
