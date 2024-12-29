@@ -3,8 +3,9 @@ package networkControllerServer;
 
 import gameLogic.Lobby;
 import gameLogic.Player;
+import networkControllerServer.marshalling.TCPReceive;
 
-import static networkControllerServer.TCPServer.tcpRec;
+
 
 public class HandleRequestFromClient {
 
@@ -16,7 +17,7 @@ public class HandleRequestFromClient {
         this.lobby = Lobby.assignLobby(player); // Spieler einer Lobby zuweisen
     }
 
-    public void handleRequest() throws Exception {
+    public void handleRequest(TCPReceive tcpRec) throws Exception {
         String code = tcpRec.receiveCode();
         switch (code) {
             case "ODD":

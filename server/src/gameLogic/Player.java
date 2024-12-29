@@ -1,24 +1,33 @@
 package gameLogic;
 
 
+import networkControllerServer.TCPServer;
+
 public class Player {
     private String name;
     private String password;
     private Double balance;
     private Bet bet;
+    private TCPServer server;
 
-    public Player(String name, String password, Double balance) {
+    public Player(String name, String password, Double balance, TCPServer server) {
         this.name = name;
         this.password = password;
         this.balance = balance;
         this.bet = new Bet();
+        this.server = server;
     }
 
-    public Player(String name, String password) {
+    public Player(String name, String password,TCPServer server) {
         this.name = name;
         this.password = password;
         this.setBalance(1000.0);
         this.bet = new Bet();
+        this.server = server;
+    }
+
+    public TCPServer getServer() {
+        return server;
     }
 
     public String getName() {

@@ -1,5 +1,6 @@
 package connection;
 
+import networkControllerClient.TCPClient;
 import networkControllerServer.TCPServer;
 
 import java.util.concurrent.ExecutorService;
@@ -9,10 +10,9 @@ public class Server {
     public static void main(String[] args) {
 
         ExecutorService executor = Executors.newFixedThreadPool(5);
-        TCPServer server = new TCPServer();
        // executor.execute(server);
        for (int i = 0; i < 3; i++) {
-            executor.execute(server);
+            executor.submit(new TCPServer(i));
 
         }
 

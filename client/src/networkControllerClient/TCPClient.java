@@ -15,6 +15,8 @@ public class TCPClient implements Runnable {
     public static  TCPSend tcpSend  = null;
     public static  TCPReceive tcpRec  = null;
     public static Socket socket = null;
+
+
 /*    @Override
     public void run() {
         int port = 1234;
@@ -71,10 +73,15 @@ public class TCPClient implements Runnable {
 
     @Override
 public void run() {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         while(true){
             try {
                 HandleRequestFromServer.handleRequest();
-               // Thread.sleep(100);
+                Thread.sleep(100);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -83,7 +90,7 @@ public void run() {
 
 
     public boolean connect()throws Exception{
-         int port = 1234;
+         int port = 1;
          InetAddress address = InetAddress.getByName ("127.0.0.1");
          socket = new Socket (address, port);
 
@@ -93,7 +100,7 @@ public void run() {
 
         tcpSend = new TCPSend (out);
         tcpRec = new TCPReceive (in);
-        Thread handler = new Thread(new TCPClient());
+        Thread handler = new Thread(this);
         handler.start();
 //TODO: bei connect muss dieser Code passieren und tcpSend und tcpRec muss öffentlich sichtbar sein
         return true;

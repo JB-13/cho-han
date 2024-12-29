@@ -3,7 +3,7 @@ package networkControllerServer;
 import gameLogic.Dealer;
 import gameLogic.Player;
 
-import static networkControllerServer.TCPServer.tcpSend;
+
 
 
 public class SendRequestToClient {
@@ -16,16 +16,16 @@ public class SendRequestToClient {
 
     public void sendRoundOutcome(Player player, int rolledNumber) throws Exception {
         if (dealer.isOdd(rolledNumber)) {
-            tcpSend.sendCode("IOD");
+            player.getServer().getTcpSend().sendCode("IOD");
         } else if (dealer.isEven(rolledNumber)) {
-            tcpSend.sendCode("IEV");
+            player.getServer().getTcpSend().sendCode("IEV");
         }
 
-        tcpSend.sendCode("INU");
-        tcpSend.sendInt(rolledNumber);
+        player.getServer().getTcpSend().sendCode("INU");
+        player.getServer().getTcpSend().sendInt(rolledNumber);
 
-        tcpSend.sendCode("BAL");
-        tcpSend.sendDouble(player.getBalance());
+        player.getServer().getTcpSend().sendCode("BAL");
+        player.getServer().getTcpSend().sendDouble(player.getBalance());
     }
 }
 
