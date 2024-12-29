@@ -2,6 +2,7 @@ package networkControllerClient;
 
 import java.util.Scanner;
 import static networkControllerClient.TCPClient.tcpSend;
+import static networkControllerClient.TCPClient.tcpRec;
 
 
 public class SendRequestToServer {
@@ -18,6 +19,21 @@ public class SendRequestToServer {
         }
 
         return true;
+    }
+
+    public static void sendLoginRequest(String username, String password) throws Exception {
+        tcpSend.sendCode("LOG");
+        tcpSend.sendString(username);
+        tcpSend.sendString(password);
+
+        String response = tcpRec.receiveString();
+        System.out.println(response);
+        if ("Login successful".equals(response)) {
+            // Verbindung zum Spiel starten, wenn erfolgreich
+            System.out.println("Login successful");
+        } else {
+            System.out.println("Login failed.");
+        }
     }
 
 

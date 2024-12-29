@@ -1,27 +1,34 @@
 package connection;
 
+
 import networkControllerClient.SendRequestToServer;
+import networkControllerClient.TCPClient;
 
 import java.util.Scanner;
+
 
 public class Client {
     static  boolean entrance = true;
     static boolean gameloop = true;
     static String option = "";
     static Scanner sc = new Scanner(System.in);
+    static boolean isLoggedIn = false;
 
     public static void main(String[] args) throws Exception {
 
         //aüßere Schleife für den ersten Screen
         while (entrance){
             System.out.println("choose your option by inputing a number");
-            System.out.println("1) connect to game lobby");
+            System.out.println("1) login/register");
             System.out.println("2) quit");
             option = sc.next();
             switch(option){
                 case "1":
-                    SendRequestToServer.connectToServer();//einfügen der verifizierung
-                    gameLoopView();
+                    SendRequestToServer.connectToServer();
+                    login();
+                    if (isLoggedIn) {
+                        gameLoopView();
+                    }
                     break;
                 case "2":
                     System.out.println("Programm soll beendet werden");
@@ -70,5 +77,22 @@ public class Client {
         }
 
     }
+
+    public static void login() throws Exception {
+        System.out.println("Enter your username:");
+        String username = sc.next();
+        System.out.println("Enter your password:");
+        String password = sc.next();
+
+        try {
+            SendRequestToServer.sendLoginRequest(username, password);
+        } catch (Exception e) {
+            System.out.println("Login failed: " + e.getMessage());
+        }
+    }
+
+
+
+
 }
 

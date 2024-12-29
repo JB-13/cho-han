@@ -40,28 +40,40 @@ public class TCPServer implements Runnable {
 
                     tcpRec = new TCPReceive(in);
                     tcpSend = new TCPSend(out);
+                    // Warten auf Login-Daten
 
-                } catch (IOException e) {
+                    // Überprüfe Login-Daten (muss noch implementiert werden)
+                    try {
+                        HandleRequestFromClient handler = HandleRequestFromClient.handleLogReg(this);
+
+                        // Spieler-Objekt wurde erfolgreich erstellt, gehe zur Lobby-Zuweisung
+                        Player player = handler.getPlayer();  // Hole das Spielerobjekt
+                        player.setTCPServer(this);
+                        assignLobby(player); // Füge den Spieler zur Lobby hinzu
+
+                        while (true) {
+                            handler.handleRequest(player.getServer());  // Verarbeite Anforderungen des Spielers
+                            Thread.sleep(3000);       // Wartezeit zwischen den Anfragen
+                        }
+
+                    } catch (IllegalArgumentException e) {
+                       // System.out.println("Login fehlgeschlagen für: " + handler.getPlayer());
+                        tcpSend.sendString("Login fehlgeschlagen: " + e.getMessage());
+                    }
+
+                } catch (IOException | InterruptedException e) {
                     System.err.println("Fehler bei der Verarbeitung der Verbindung: " + e.getMessage());
                     e.printStackTrace();
-                }
-
-                Player p1 = new Player("jan" + port, "1234", this);
-                assignLobby(p1);
-
-                HandleRequestFromClient handler = new HandleRequestFromClient(p1);
-                while (true){
-                    handler.handleRequest(this);
-
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
             }
+
         } catch (IOException e) {
             System.err.println("Fehler beim Starten des Servers: " + e.getMessage());
             e.printStackTrace();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 

@@ -3,7 +3,10 @@ package gameLogic;
 
 import networkControllerServer.TCPServer;
 
-public class Player {
+import java.io.Serializable;
+
+public class Player implements Serializable {
+    private static final long serialVersionUID = 6076348035636872825L;
     private String name;
     private String password;
     private Double balance;

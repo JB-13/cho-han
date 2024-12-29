@@ -1,10 +1,14 @@
 package networkControllerServer;
 
 
+import database.UserDatabase;
 import gameLogic.Lobby;
 import gameLogic.Player;
 
+import java.io.IOException;
 
+import static networkControllerClient.TCPClient.tcpRec;
+import static networkControllerClient.TCPClient.tcpSend;
 
 
 public class HandleRequestFromClient {
@@ -12,9 +16,18 @@ public class HandleRequestFromClient {
     private Player player; // Der aktuelle Spieler
     private Lobby lobby;   // Die zugewiesene Lobby
 
-    public HandleRequestFromClient(Player player) {
-        this.player = player;
-        this.lobby = Lobby.assignLobby(player); // Spieler einer Lobby zuweisen
+
+    public HandleRequestFromClient(String username, String password) throws IOException, ClassNotFoundException {
+        if (UserDatabase.validateLogin(username, password)) {
+            this.player = UserDatabase.getPlayer(username);
+            this.lobby = Lobby.assignLobby(player); // Spieler einer Lobby zuweisen
+        } else {
+            throw new IllegalArgumentException("Invalid login credentials");
+        }
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     public void handleRequest(TCPServer server) throws Exception {
@@ -57,7 +70,34 @@ public class HandleRequestFromClient {
                 break;
         }
     }
+
+
+    public static HandleRequestFromClient handleLogReg(TCPServer server) throws Exception {
+        String code = server.getTcpRec().receiveCode();
+        switch (code) {
+            case "LOG":
+                String loginUsername = tcpRec.receiveString();
+                String loginPassword = tcpRec.receiveString();
+                try {
+                    if (UserDatabase.validateLogin(loginUsername, loginPassword)) {
+                        tcpSend.sendString("Login successful");
+                        return new HandleRequestFromClient(loginUsername, loginPassword);
+                    } else {
+                        tcpSend.sendString("Invalid credentials");
+                    }
+                } catch (Exception e) {
+                    tcpSend.sendString("Login failed: " + e.getMessage());
+                }
+                break;
+
+        }
+        return null;
+    }
+
 }
+
+
+
 
 /*
 Player Actions (off server)
