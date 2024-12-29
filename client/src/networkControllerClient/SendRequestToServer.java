@@ -1,6 +1,8 @@
 package networkControllerClient;
 
 import java.util.Scanner;
+
+import static networkControllerClient.TCPClient.tcpRec;
 import static networkControllerClient.TCPClient.tcpSend;
 
 
@@ -19,6 +21,7 @@ public class SendRequestToServer {
 
         return true;
     }
+
 
 
     public static void betOdd() throws Exception {
@@ -173,7 +176,10 @@ public class SendRequestToServer {
         tcpClient.disconnect();
     }
 
+
 }
+
+
 
 /*
 

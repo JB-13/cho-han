@@ -40,7 +40,6 @@ public class Client {
         gameloop = true; //setze auf true falls nicht geschehen
         // if methoden aufruf zum connecten = true
         // else retrun;
-
         while (gameloop){ //zweite schleife für das Spiel selbst
             option = sc.next();
             switch (option){

@@ -4,7 +4,6 @@ package networkControllerServer;
 import gameLogic.Lobby;
 import gameLogic.Player;
 
-import static networkControllerServer.TCPServer.tcpRec;
 
 public class HandleRequestFromClient {
 
@@ -16,22 +15,22 @@ public class HandleRequestFromClient {
         this.lobby = Lobby.assignLobby(player); // Spieler einer Lobby zuweisen
     }
 
-    public void handleRequest() throws Exception {
-        String code = tcpRec.receiveCode();
+    public void handleRequest(TCPServer server) throws Exception {
+        String code = server.getTcpRec().receiveCode();
         switch (code) {
             case "ODD":
-                double oddAmount = tcpRec.receiveDouble();
+                double oddAmount = server.getTcpRec().receiveDouble();
                 player.betOdd(oddAmount);
                 break;
 
             case "EVE":
-                double evenAmount = tcpRec.receiveDouble();
+                double evenAmount = server.getTcpRec().receiveDouble();
                 player.betEven(evenAmount);
                 break;
 
             case "NUM":
-                double numAmount = tcpRec.receiveDouble();
-                int number = tcpRec.receiveInt();
+                double numAmount = server.getTcpRec().receiveDouble();
+                int number = server.getTcpRec().receiveInt();
                 if (number < 2 || number > 12) {
                     System.out.println("Ungültige Augenzahl: " + number);
                     player.skipRound();
@@ -53,6 +52,15 @@ public class HandleRequestFromClient {
                 System.out.println("Unbekannter Code: " + code);
                 player.skipRound();
                 break;
+        }
+    }
+
+    public static Player handleLogin(String code, String name, String passwort,TCPServer server){
+        if (code.equals("LOG")){
+        Player p = new Player(name,passwort,server);
+        return p;
+        } else {
+            return null;
         }
     }
 }

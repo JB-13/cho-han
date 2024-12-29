@@ -6,6 +6,7 @@ public class HandleRequestFromServer {
     private static double balance = 1000.0;
     public static void handleRequest() throws Exception {
         String code = tcpRec.receiveCode();
+
         switch (code){
             case "IOD":
                 System.out.println("=========================");
@@ -37,6 +38,10 @@ public class HandleRequestFromServer {
         handleRequest();
         System.out.println("==========================");
         System.out.println();
+    }
+
+    public static double getBalance(){
+        return balance;
     }
 }
 /*
