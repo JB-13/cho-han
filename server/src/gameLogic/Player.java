@@ -13,24 +13,25 @@ public class Player implements Serializable {
     private Bet bet;
     private TCPServer server;
 
-    public Player(String name, String password, Double balance, TCPServer server) {
+    public Player(String name, String password, Double balance) {
         this.name = name;
         this.password = password;
         this.balance = balance;
         this.bet = new Bet();
-        this.server = server;
     }
 
-    public Player(String name, String password,TCPServer server) {
+    public Player(String name, String password) {
         this.name = name;
         this.password = password;
         this.setBalance(1000.0);
         this.bet = new Bet();
-        this.server = server;
     }
 
     public TCPServer getServer() {
         return server;
+    }
+    public void setTCPServer(TCPServer server){
+        this.server = server;
     }
 
     public String getName() {
