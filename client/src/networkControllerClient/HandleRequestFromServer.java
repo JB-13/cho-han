@@ -30,6 +30,11 @@ public class HandleRequestFromServer {
         }
     }
 
+    public static double getBalance(){
+        return balance;
+
+    }
+
     public static void handleRoundOutcome()  throws Exception{
         System.out.println("=========================");
         handleRequest();
