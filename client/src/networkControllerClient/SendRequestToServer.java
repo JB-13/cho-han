@@ -1,8 +1,6 @@
 package networkControllerClient;
 
 import java.util.Scanner;
-
-import static networkControllerClient.TCPClient.tcpRec;
 import static networkControllerClient.TCPClient.tcpSend;
 
 
@@ -23,40 +21,39 @@ public class SendRequestToServer {
     }
 
 
-
     public static void betOdd() throws Exception {
-    double amount = 0.0;
-    boolean validBet = false;
+        double amount = 0.0;
+        boolean validBet = false;
         double currentBalance = 0.0;
 
 
-         currentBalance = HandleRequestFromServer.getBalance();
+        currentBalance = HandleRequestFromServer.getBalance();
 
 
 
 
-    while(!validBet) {
-        try {
-            System.out.println("how many points are you betting?");
-            amount = sc.nextDouble();
+        while(!validBet) {
+            try {
+                System.out.println("how many points are you betting?");
+                amount = sc.nextDouble();
 
-            if (amount <= 0) {
-                System.out.println("Bet must be greater than zero. Type again");
-                continue;
+                if (amount <= 0) {
+                    System.out.println("Bet must be greater than zero. Type again");
+                    continue;
+                }
+
+                if (amount > currentBalance) {
+                    System.out.println("You do not have enough balance to place this bet. Your balance is: " + currentBalance);
+                    continue;
+                }
+
+
+                validBet = true;
+            } catch (Exception e) {
+                System.out.println("Invalid Input");
+                sc.nextLine();
             }
-
-            if (amount > currentBalance) {
-                System.out.println("You do not have enough balance to place this bet. Your balance is: " + currentBalance);
-                continue;
-            }
-
-
-            validBet = true;
-        } catch (Exception e) {
-            System.out.println("Invalid Input");
-            sc.nextLine();
         }
-    }
 
         tcpSend.sendCode("ODD");
         tcpSend.sendDouble(amount);
@@ -167,7 +164,7 @@ public class SendRequestToServer {
     }
     public static void skipRound() throws Exception {
         tcpSend.sendCode("SKI");
-     //   HandleRequestFromServer.handleRoundOutcome();
+        //   HandleRequestFromServer.handleRoundOutcome();
 
     }
 
@@ -176,10 +173,7 @@ public class SendRequestToServer {
         tcpClient.disconnect();
     }
 
-
 }
-
-
 
 /*
 
