@@ -3,7 +3,8 @@ package networkControllerServer;
 import gameLogic.Dealer;
 import gameLogic.Player;
 
-
+import static database.UserDatabase.saveUser;
+import static database.UserDatabase.updateBalance;
 
 
 public class SendRequestToClient {
@@ -26,6 +27,7 @@ public class SendRequestToClient {
 
         player.getServer().getTcpSend().sendCode("BAL");
         player.getServer().getTcpSend().sendDouble(player.getBalance());
+        updateBalance(player.getName(), player.getBalance());
     }
 }
 

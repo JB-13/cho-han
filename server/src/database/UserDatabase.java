@@ -4,70 +4,171 @@ import gameLogic.Player;
 import networkControllerServer.TCPServer;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 public class UserDatabase {
     private static final String FILE_PATH = "users.txt";
-    private static Map<String, Player> users = new HashMap<>();
 
 
-static {
-    users.put("jan", new Player("jan","123"));
-}
     // Login-Validierung
     public static boolean validateLogin(String username, String password) {
-        if (!users.containsKey(username)) {
-            Player player = new Player(username, password);
-            users.put(username, player);
-            saveUsers();
-            return username != null && password != null;
+        System.out.println("Prüfe Login für Benutzer: " + username);
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(FILE_PATH), StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(";");
+                if (parts.length == 3) {
+                    String fileUsername = parts[0];
+                    String filePassword = parts[1];
+
+                    if (fileUsername.equals(username)) {
+                        return filePassword.equals(password);
+                    }
+                }
+            }
+
+            // Benutzer nicht vorhanden, erstelle neuen Eintrag
+            System.out.println("Benutzer nicht vorhanden, erstelle neuen Eintrag");
+            addUser(username, password);
+            return true;
+
+        } catch (IOException e) {
+            System.err.println("Fehler beim Überprüfen des Logins: " + e.getMessage());
+            e.printStackTrace();
         }
-        Player player = users.get(username);
-        return player != null && player.getPassword().equals(password);
+
+        return false;
+    }
+
+    // Spieler erstellen und speichern
+    private static void addUser(String username, String password) {
+        Player player = new Player(username, password);
+        saveUser(player);
     }
 
     // Spieler anhand des Benutzernamens abrufen
     public static Player getPlayer(String username) {
-        return users.get(username);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(FILE_PATH), StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(";");
+                if (parts.length == 3) {
+                    String fileUsername = parts[0];
+                    if (fileUsername.equals(username)) {
+                        String filePassword = parts[1];
+                        double balance = Double.parseDouble(parts[2]);
+                        return new Player(fileUsername, filePassword, balance);
+                    }
+                }
+            }
+        } catch (IOException | NumberFormatException e) {
+            System.err.println("Fehler beim Abrufen des Spielers: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     // Benutzer speichern
-    private static boolean saveUsers() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
-            // Temporäre Map ohne TCPServer-Referenzen
-            Map<String, Player> tempUsers = new HashMap<>();
-            for (Map.Entry<String, Player> entry : users.entrySet()) {
-                Player player = entry.getValue();
-                tempUsers.put(entry.getKey(), new Player(player.getName(), player.getPassword(), player.getBalance()));
-            }
-            oos.writeObject(tempUsers);
-            return true;
+    public static void saveUser(Player player) {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(FILE_PATH, true), StandardCharsets.UTF_8))) {
+            String line = player.getName() + ";" + player.getPassword() + ";" + player.getBalance();
+            writer.write(line);
+            writer.newLine();
         } catch (IOException e) {
-            System.err.println("Fehler beim Speichern der Benutzer: " + e.getMessage());
+            System.err.println("Fehler beim Speichern des Benutzers: " + e.getMessage());
             e.printStackTrace();
-            return false;
         }
     }
-
+/*
     // Benutzer laden
-    @SuppressWarnings("unchecked")
     public static void loadUsers() {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_PATH))) {
-            users = (Map<String, Player>) ois.readObject();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(FILE_PATH), StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(";");
+                if (parts.length == 3) {
+                    String username = parts[0];
+                    String password = parts[1];
+                    double balance = Double.parseDouble(parts[2]);
+                    users.put(username, new Player(username, password, balance));
+                } else {
+                    System.err.println("Ungültige Zeile in der Datei: " + line);
+                }
+            }
         } catch (FileNotFoundException e) {
             System.out.println("Keine Benutzerdaten gefunden, neue Datenbank wird erstellt.");
             users = new HashMap<>();
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
             System.err.println("Fehler beim Laden der Benutzer: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
+ */
+
     // Benutzer ausgeben (Debugging-Zwecke)
     public static void printUsers() {
-        users.forEach((username, player) -> {
-            System.out.println("Benutzername: " + username + ", Balance: " + player.getBalance());
-        });
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(FILE_PATH), StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(";");
+                if (parts.length == 3) {
+                    String username = parts[0];
+                    double balance = Double.parseDouble(parts[2]);
+                    System.out.println("Benutzername: " + username + ", Balance: " + balance);
+                }
+            }
+        } catch (IOException | NumberFormatException e) {
+            System.err.println("Fehler beim Ausgeben der Benutzer: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
+
+    // Balance eines Benutzers aktualisieren
+    public static void updateBalance(String username, double newBalance) {
+        File userFile = new File(FILE_PATH);
+        StringBuilder fileContent = new StringBuilder();
+        boolean userFound = false;
+
+        try {
+            // Datei Zeile für Zeile lesen
+            if (userFile.exists()) {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(userFile), StandardCharsets.UTF_8))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        String[] parts = line.split(";");
+                        if (parts.length == 3) {
+                            String fileUsername = parts[0];
+                            if (fileUsername.equals(username)) {
+                                // Balance aktualisieren
+                                line = username + ";" + parts[1] + ";" + newBalance;
+                                userFound = true;
+                            }
+                        }
+                        fileContent.append(line).append(System.lineSeparator());
+                    }
+                }
+            }
+
+            // Falls Benutzer nicht gefunden, Nachricht ausgeben
+            if (!userFound) {
+                System.out.println("Benutzername nicht gefunden: " + username);
+                return;
+            }
+
+            // Datei mit aktualisiertem Inhalt neu schreiben
+            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(userFile), StandardCharsets.UTF_8))) {
+                writer.write(fileContent.toString());
+            }
+
+        } catch (IOException e) {
+            System.err.println("Fehler beim Aktualisieren der Balance: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
 }
