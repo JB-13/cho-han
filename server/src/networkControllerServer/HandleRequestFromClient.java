@@ -18,7 +18,7 @@ public class HandleRequestFromClient {
     public HandleRequestFromClient(String username, String password) throws IOException, ClassNotFoundException {
         if (UserDatabase.validateLogin(username, password)) {
             this.player = UserDatabase.getPlayer(username);
-            this.lobby = Lobby.assignLobby(player); // Spieler einer Lobby zuweisen
+            assignLobby(player); // Spieler einer Lobby zuweisen
         } else {
             throw new IllegalArgumentException("Invalid login credentials");
         }

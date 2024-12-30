@@ -85,7 +85,7 @@ public class Client {
         String password = sc.next();
 
         try {
-            SendRequestToServer.sendLoginRequest(username, password);
+            isLoggedIn = SendRequestToServer.sendLoginRequest(username, password);
         } catch (Exception e) {
             System.out.println("Login failed: " + e.getMessage());
         }

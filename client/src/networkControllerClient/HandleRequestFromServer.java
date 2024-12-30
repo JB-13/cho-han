@@ -27,6 +27,9 @@ public class HandleRequestFromServer {
                 System.out.println("4) skip round");
                 System.out.println("5) exit lobby");
                 break;
+            case "CBA":
+                balance = tcpRec.receiveDouble();
+                System.out.println("your balance is " + balance); break;
         }
     }
 

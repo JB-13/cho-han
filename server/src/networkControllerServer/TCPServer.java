@@ -1,6 +1,7 @@
 package networkControllerServer;
 
 import gameLogic.Player;
+import networkControllerClient.HandleRequestFromServer;
 import networkControllerClient.TCPClient;
 import networkControllerServer.marshalling.TCPReceive;
 import networkControllerServer.marshalling.TCPSend;
@@ -45,21 +46,28 @@ public class TCPServer implements Runnable {
                     // Überprüfe Login-Daten (muss noch implementiert werden)
                     try {
                         HandleRequestFromClient handler = HandleRequestFromClient.handleLogReg(this);
-
                         // Spieler-Objekt wurde erfolgreich erstellt, gehe zur Lobby-Zuweisung
+                        if (handler.equals(null)){
+
+                            connection.close();
+                        } else{
                         Player player = handler.getPlayer();  // Hole das Spielerobjekt
                         player.setTCPServer(this);
+                        tcpSend.sendCode("CBA");
+                        tcpSend.sendDouble(player.getBalance()); //sende Information an Client, wie vieln guthaben er hat
                         assignLobby(player); // Füge den Spieler zur Lobby hinzu
 
                         while (true) {
                             handler.handleRequest(player.getServer());  // Verarbeite Anforderungen des Spielers
                             Thread.sleep(3000);       // Wartezeit zwischen den Anfragen
                         }
+                        }
 
                     } catch (IllegalArgumentException e) {
                        // System.out.println("Login fehlgeschlagen für: " + handler.getPlayer());
                         tcpSend.sendString("Login fehlgeschlagen: " + e.getMessage());
                     }
+
 
                 } catch (IOException | InterruptedException e) {
                     System.err.println("Fehler bei der Verarbeitung der Verbindung: " + e.getMessage());

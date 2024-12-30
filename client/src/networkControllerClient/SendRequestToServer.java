@@ -33,9 +33,14 @@ public class SendRequestToServer {
         if ("Login successful".equals(response)) {
             // Verbindung zum Spiel starten, wenn erfolgreich
             System.out.println("Login successful");
+            HandleRequestFromServer.handleRequest();
+            tcpClient.startGameHandlerThread();
+            return true;
         } else {
             System.out.println("Login failed.");
+            return false;
         }
+
     }
 
 

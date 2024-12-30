@@ -94,10 +94,14 @@ public void run() {
 
         tcpSend = new TCPSend (out);
         tcpRec = new TCPReceive (in);
-        Thread handler = new Thread(this);
-        handler.start();
 //TODO: bei connect muss dieser Code passieren und tcpSend und tcpRec muss öffentlich sichtbar sein
         return true;
+    }
+
+    public void startGameHandlerThread(){
+        Thread handler = new Thread(this);
+        handler.start();
+
     }
 
     public void disconnect() throws Exception {
