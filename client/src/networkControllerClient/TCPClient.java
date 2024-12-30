@@ -72,13 +72,17 @@ public class TCPClient implements Runnable {
     }*/
 
     @Override
-public void run() {
-        while(true){
-            try {
+    public void run() {
+        try {
+            while (!Thread.currentThread().isInterrupted()) { // Prüfen, ob der Thread unterbrochen wurde
                 HandleRequestFromServer.handleRequest();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
             }
+        } catch (Exception e) {
+            System.out.println("Server antwortet nicht mehr");
+                disconnect(); // Verbindung trennen
+                Thread.currentThread().interrupt();
+                System.out.println("Verbindung geschlossen.");
+
         }
     }
 

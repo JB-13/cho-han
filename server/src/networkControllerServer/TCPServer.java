@@ -28,7 +28,7 @@ public class TCPServer implements Runnable {
     public void run() {
 
         try {
-            ServerSocket socket = new ServerSocket(port);
+             socket = new ServerSocket(port);
 
             while (true) {
                 System.out.println("Server hört auf TCP-Port: " + socket.getLocalPort ());
@@ -42,10 +42,15 @@ public class TCPServer implements Runnable {
                     tcpRec = new TCPReceive(in);
                     tcpSend = new TCPSend(out);
                     // Warten auf Login-Daten
+                    String response = tcpRec.receiveCode();
+                    if (response.equals("CON")){
+                        tcpSend.sendCode("ACK");
+                    } else{
+                        continue;
+                    }
 
-                    // Überprüfe Login-Daten (muss noch implementiert werden)
                     try {
-                        HandleRequestFromClient handler = HandleRequestFromClient.handleLogReg(this);
+                        HandleRequestFromClient handler = HandleRequestFromClient.handleLogReg(this); //hier wird der Login empfangen
                         // Spieler-Objekt wurde erfolgreich erstellt, gehe zur Lobby-Zuweisung
                         if (handler.equals(null)){
 
@@ -55,11 +60,13 @@ public class TCPServer implements Runnable {
                         player.setTCPServer(this);
                         tcpSend.sendCode("CBA");
                         tcpSend.sendDouble(player.getBalance()); //sende Information an Client, wie vieln guthaben er hat
+                            Thread keepalive = new Thread(new KeepAlive((this)));
+                            keepalive.start();
                         assignLobby(player); // Füge den Spieler zur Lobby hinzu
 
                         while (true) {
                             handler.handleRequest(player.getServer());  // Verarbeite Anforderungen des Spielers
-                            Thread.sleep(3000);       // Wartezeit zwischen den Anfragen
+
                         }
                         }
 
@@ -93,41 +100,25 @@ public class TCPServer implements Runnable {
         return tcpSend;
     }
 
-    public static void main(String[] args) throws Exception {
-/*
-        int port = 1234;
-        ServerSocket socket = new ServerSocket (port);
-        System.out.println ("Server hört auf TCP-Port: " + socket.getLocalPort ());
-        System.out.println ("Warten auf Verbindungsaufbau");
+}
 
-        Socket connection = socket.accept ();
-
-        InputStream in = connection.getInputStream();
-        OutputStream out = connection.getOutputStream();
-        System.out.println ("Verbindungsaufbau hat statt gefunden");
-        tcpRec = new TCPReceive (in);
-        tcpSend = new TCPSend (out);
-
-        Player p1 = new Player("jan1", "1234");
-        assignLobby(p1);
-
-        HandleRequestFromClient handler = new HandleRequestFromClient(p1);
-        while (true){
-            handler.handleRequest();
-            Thread.sleep(3000);
-
-        }*/
-
-
-/*        System.out.println(tcpRec.receiveCode());
-        System.out.println(tcpRec.receiveDouble());
-        System.out.println(tcpRec.receiveInt());
-        System.out.println(tcpRec.receiveString());*/
-/*        connection.close ();
-        socket.close ();*/
-
-
+class KeepAlive implements Runnable{
+    private TCPServer server;
+    public KeepAlive(TCPServer server) {
+        this.server = server;
     }
+    @Override
+    public void run() {
+        try {
+            while (true) {
+                server.getTcpSend().sendCode("ALI");
+                Thread.sleep(2000);
 
+
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

@@ -30,6 +30,7 @@ public class HandleRequestFromServer {
             case "CBA":
                 balance = tcpRec.receiveDouble();
                 System.out.println("your balance is " + balance); break;
+            case "ALI": break;
         }
     }
 
