@@ -83,17 +83,48 @@ public void run() {
     }
 
 
-    public boolean connect()throws Exception{
-         int port = 1;
-         InetAddress address = InetAddress.getByName ("127.0.0.1");
-         socket = new Socket (address, port);
+    public boolean connect(){
+        int port;
+        InetAddress address = null;
+        OutputStream out = null;
+        InputStream in = null;
+        try {
+            address = InetAddress.getByName ("127.0.0.1");
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
+        for (int i = 50000; i <= 50050; i++) {
+            port = i;
+                try {
+                    socket = new Socket (address, port);
+                    socket.setSoTimeout(100); //keep alive msg eventuell notwendig
+                    out = socket.getOutputStream ( );
+                    in = socket.getInputStream ( );
+                    tcpSend = new TCPSend (out);
+                    tcpRec = new TCPReceive (in);
 
-        OutputStream out = socket.getOutputStream ( );
-        InputStream in = socket.getInputStream ( );
-        System.out.println ("Verbunden mit " + socket.getInetAddress ( ).toString () + ":" + socket.getPort ());
+                    tcpSend.sendCode("CON");
+                    String response = tcpRec.receiveCode();
+                    if ("ACK".equals(response)) { // Server bestätigt mit "ACK"
+                        System.out.println ("Erfolgreich Verbunden mit " + socket.getInetAddress ( ).toString () + ":" + socket.getPort ());
+                        socket.setSoTimeout(5000);
+                        return true;
+                    } else {
+                        System.out.println("Server hat Verbindung abgelehnt.");
+                        socket.close(); // Verbindung schließen, falls keine Bestätigung
+                    }
 
-        tcpSend = new TCPSend (out);
-        tcpRec = new TCPReceive (in);
+                } catch (IOException e) {
+                    System.out.println("Port " + port + " ist nicht verfügbar oder wird schon benutzt");
+                } catch (Exception e) {
+                    System.out.println("Lesen hat zu lange gedauert");
+
+                }
+            }
+
+        System.out.println ("Erfolgreich Verbunden mit " + socket.getInetAddress ( ).toString () + ":" + socket.getPort ());
+
+
 //TODO: bei connect muss dieser Code passieren und tcpSend und tcpRec muss öffentlich sichtbar sein
         return true;
     }
@@ -104,9 +135,14 @@ public void run() {
 
     }
 
-    public void disconnect() throws Exception {
-        if (socket != null && !socket.isClosed()) {
-            socket.close();
+    public synchronized void disconnect() {
+        try {
+            if (socket != null && !socket.isClosed()) {
+                socket.close();
+                System.out.println("*****Verbindung zum Server geschlossen*****");
+            }
+        } catch (IOException e) {
+            System.err.println("Fehler beim Schließen der Verbindung: " + e.getMessage());
         }
     }
 

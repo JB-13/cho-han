@@ -15,13 +15,9 @@ public class HandleRequestFromClient {
     private Player player; // Der aktuelle Spieler
 
 
-    public HandleRequestFromClient(String username, String password) throws IOException, ClassNotFoundException {
-        if (UserDatabase.validateLogin(username, password)) {
+    public HandleRequestFromClient(String username){
             this.player = UserDatabase.getPlayer(username);
-            assignLobby(player); // Spieler einer Lobby zuweisen
-        } else {
-            throw new IllegalArgumentException("Invalid login credentials");
-        }
+            //assignLobby(player); // Spieler einer Lobby zuweisen (wird bereits in TCPServer getan
     }
 
     public Player getPlayer() {
@@ -78,7 +74,7 @@ public class HandleRequestFromClient {
             try {
                 if (UserDatabase.validateLogin(loginUsername, loginPassword)) {
                     server.getTcpSend().sendString("Login successful");
-                    return new HandleRequestFromClient(loginUsername, loginPassword);
+                    return new HandleRequestFromClient(loginUsername);
                 } else {
                     server.getTcpSend().sendString("Invalid credentials");
                 }
