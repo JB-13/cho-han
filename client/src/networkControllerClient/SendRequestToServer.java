@@ -34,7 +34,7 @@ public class SendRequestToServer {
             // Verbindung zum Spiel starten, wenn erfolgreich
             System.out.println("Login successful");
             HandleRequestFromServer.handleRequest();
-            tcpClient.startGameHandlerThread();
+            tcpClient.startGameHandlerThread(); // nach dem Login werden Keep ALive Messages vom Server empfangen
             return true;
         } else {
             System.out.println("Login failed.");

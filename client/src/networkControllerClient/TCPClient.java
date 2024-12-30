@@ -129,7 +129,6 @@ public class TCPClient implements Runnable {
         System.out.println ("Erfolgreich Verbunden mit " + socket.getInetAddress ( ).toString () + ":" + socket.getPort ());
 
 
-//TODO: bei connect muss dieser Code passieren und tcpSend und tcpRec muss öffentlich sichtbar sein
         return true;
     }
 
