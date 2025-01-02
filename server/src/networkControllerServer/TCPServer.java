@@ -99,6 +99,7 @@ public class TCPServer implements Runnable {
                         Lobby.removePlayerFromLobby(player);
                         connection.close();
                     }
+
                 } catch (IOException e) {
                     System.err.println("Error processing connection: " + e.getMessage());
                     Lobby.removePlayerFromLobby(player);

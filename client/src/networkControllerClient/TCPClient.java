@@ -37,7 +37,7 @@ public class TCPClient implements Runnable {
     }
 
 
-    public boolean connect(){
+    public synchronized boolean connect(){
         int port;
         InetAddress address = null;
         OutputStream out = null;

@@ -39,14 +39,6 @@ public class HandleRequestFromServer {
 
     }
 
-    public static void handleRoundOutcome()  throws Exception{
-        System.out.println("=========================");
-        handleRequest();
-        handleRequest();
-        handleRequest();
-        System.out.println("==========================");
-        System.out.println();
-    }
 }
 /*
 Server Actions
