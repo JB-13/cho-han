@@ -20,6 +20,8 @@ public class TCPServer implements Runnable {
     private  TCPSend tcpSend;
     private  TCPReceive tcpRec;
     private  ServerSocket socket;
+    private Socket connection;
+    private boolean active = false;
 
     public TCPServer(int port) {
         this.port = port;
@@ -29,7 +31,7 @@ public class TCPServer implements Runnable {
     public void run() {
 
         try {
-             socket = new ServerSocket(port);
+            socket = new ServerSocket(port);
 
             while (true) {
 /*                if (socket.isClosed()){
@@ -77,8 +79,9 @@ public class TCPServer implements Runnable {
                         Thread keepalive = new Thread(new KeepAlive((this)));
                         keepalive.start();
                         assignLobby(player); // Füge den Spieler zur Lobby hinzu
+                        active= true;
 
-                        while (true) {
+                        while (active) {
                             handler.handleRequest(player.getServer());  // Verarbeite Anforderungen des Spielers
                         }
 
@@ -116,6 +119,9 @@ public class TCPServer implements Runnable {
         return tcpSend;
     }
 
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }
 
 class KeepAlive implements Runnable{
@@ -126,7 +132,7 @@ class KeepAlive implements Runnable{
     @Override
     public void run() {
         try {
-            while (true) {
+            while (!Thread.currentThread().isInterrupted()) {
                 server.getTcpSend().sendCode("ALI");
                 Thread.sleep(2000);
 
@@ -145,3 +151,5 @@ class KeepAlive implements Runnable{
     }
 
 }
+
+

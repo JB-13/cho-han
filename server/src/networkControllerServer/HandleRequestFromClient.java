@@ -54,9 +54,10 @@ public class HandleRequestFromClient {
 
             case "QUI":
                 player.skipRound();
-                // Spieler setzt aus
-                // lobby.stopLobby();  // Lobby beenden, falls nötig
+                Lobby.removePlayerFromLobby(player);
+                server.setActive(false);
                 break;
+            case "ALI":break;
 
             default:
                 System.out.println("Invalid Code: " + code);

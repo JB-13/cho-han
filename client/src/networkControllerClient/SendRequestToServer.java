@@ -8,6 +8,7 @@ import static networkControllerClient.TCPClient.tcpRec;
 public class SendRequestToServer {
     static Scanner sc = new Scanner(System.in);
     public static TCPClient tcpClient = new TCPClient();
+    public static KeepAlive keepAlive = new KeepAlive();
     public static boolean connectToServer(){ //boolean weil, man wissen soll, ob es geklappt hat
 /*        Thread thread = new Thread(tcpClient);
         thread.start();*/
@@ -35,6 +36,7 @@ public class SendRequestToServer {
             System.out.println("Login successful");
             HandleRequestFromServer.handleRequest();
             tcpClient.startGameHandlerThread(); // nach dem Login werden Keep ALive Messages vom Server empfangen
+            keepAlive.startGameHandlerThread();
             return true;
         } else {
             System.out.println("Login failed.");

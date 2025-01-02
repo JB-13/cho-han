@@ -27,6 +27,28 @@ public class Lobby implements Runnable {
         this.players.add(player);
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public static synchronized boolean removePlayerFromLobby(Player player) {
+        for (Lobby lobby : Lobbies) { // Durchsuche alle Lobbies
+            if (lobby.players.contains(player)) { // Spieler gefunden
+                lobby.players.remove(player); // Entferne den Spieler
+                System.out.println("User " + player.getName() + " was removed from Lobby " + lobby.getId() + ".");
+
+                // Optional: Entferne leere Lobbies
+                if (lobby.getLobbySize() == 0) {
+                    Lobbies.remove(lobby);
+                    System.out.println("Lobby " + lobby.getId() + " was removed, because it was empty.");
+                }
+                return true; // Erfolgreich entfernt
+            }
+        }
+        System.out.println("User " + player.getName() + " was not found in any Lobby.");
+        return false; // Spieler war in keiner Lobby
+    }
+
     public int getLobbySize() {
         return players.size();
     }
@@ -63,8 +85,19 @@ public class Lobby implements Runnable {
     }
 
 
-    public void startGame() throws InterruptedException {
-        Thread.sleep(15000); // Wartezeit für Wetten
+    public void startGame(){
+        try {
+            Thread.sleep(15000); // Wartezeit für Wetten
+        } catch (InterruptedException e) {
+            System.err.println("Error during trhead sleep: " + e.getMessage());
+        }
+        if (players.isEmpty()) {
+            // Entferne Lobbies ohne Spieler
+            Lobbies.removeIf(lobby -> lobby.getLobbySize() == 0);
+            Thread.currentThread().interrupt();
+            return;
+        }
+        System.out.println("LobbyNr: " + getId());
         int number = dealer.rollDice();
         for (Player player : players) {
            // System.out.println(player.getName());
@@ -113,14 +146,14 @@ public class Lobby implements Runnable {
 
 
     public void run() {
-        while (active) {
+        while (!Thread.currentThread().isInterrupted()) {
             try {
                 startGame();
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
                // System.out.println("Lobby was interrupted");
                 Thread.currentThread().interrupt();
-                break;
+
             }
         }
     }
