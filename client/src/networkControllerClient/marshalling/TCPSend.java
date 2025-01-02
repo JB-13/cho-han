@@ -47,7 +47,7 @@ public class TCPSend {
 
     public void sendCode(String code) throws Exception {
         if (code.length() != 3) {
-            throw new IllegalArgumentException("Code muss genau 3 Zeichen lang sein.");
+            throw new IllegalArgumentException("Code must be exactly 3 characters long.");
         }
         if (bbuf.position() > 0 || bbuf.limit() > 0) {
             bbuf.clear();

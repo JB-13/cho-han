@@ -4,22 +4,27 @@ import networkControllerServer.SendRequestToClient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Lobby implements Runnable {
-
     private List<Player> players = new ArrayList<>();
     private Dealer dealer = new Dealer();
     private boolean active = true;
     public static List<Lobby> Lobbies = new ArrayList<>();
     private static int maxPlayersInLobby = 5;
     private SendRequestToClient sender = new SendRequestToClient(dealer);
+    private int id = 0;
+    private static final AtomicInteger idCounter = new AtomicInteger(0);
+
 
     public Lobby() {
-
+        this.id = idCounter.incrementAndGet();
     }
 
+
     public Lobby(Player player) {
-        players.add(player);
+        this.id = idCounter.incrementAndGet();
+        this.players.add(player);
     }
 
     public int getLobbySize() {
@@ -30,20 +35,19 @@ public class Lobby implements Runnable {
         if (!players.contains(player)) { // Prüfe, ob der Spieler bereits in der Liste ist
             players.add(player);
         } else {
-            System.out.println("Player " + player.getName() + " ist bereits in der Lobby.");
+            System.out.println("User " + player.getName() + " joined already a lobby.");
         }
     }
 
 
 
     public static Lobby assignLobby(Player player) {
-        // Entferne Lobbies ohne Spieler
-        Lobbies.removeIf(lobby -> lobby.getLobbySize() == 0);
 
         // Prüfe, ob es eine freie Lobby gibt
         for (Lobby lobby : Lobbies) {
             if (lobby.getLobbySize() < maxPlayersInLobby) { // Freie Lobby gefunden
                 lobby.connectPlayer(player);
+                System.out.println("User " + player.getName() + " joined Lobby " + lobby.getId() + ".");
                 return lobby; // Rückgabe der zugewiesenen Lobby
             }
         }
@@ -53,6 +57,7 @@ public class Lobby implements Runnable {
         Thread lobbyThread = new Thread(newLobby);
         Lobbies.add(newLobby);
         newLobby.connectPlayer(player);
+        System.out.println("User " + player.getName() + " joined Lobby " + newLobby.getId() + ".");
         lobbyThread.start();
         return newLobby; // Rückgabe der neu erstellten Lobby
     }
@@ -64,11 +69,10 @@ public class Lobby implements Runnable {
         for (Player player : players) {
            // System.out.println(player.getName());
             Bet bet = player.getBet();
-            System.out.println("hol spieler Bet");
+
 
 
             if (bet.isSkip()) {
-                System.out.println("bet is skipped");
                 try {
                     sender.sendRoundOutcome(player, number);
                 } catch (Exception e) {
@@ -80,17 +84,17 @@ public class Lobby implements Runnable {
             if ((bet.isEven() && dealer.isEven(number)) || (bet.isOdd() && dealer.isOdd(number))) {
                 // Spieler gewinnt bei "Even" oder "Odd", erhält Gewinn
                 player.updateBalance(bet.getAmount());
-                System.out.println("gewettet: " + bet.getAmount());
+
             } else if (bet.getNumber() == number) {
                 // Spieler gewinnt bei spezifischer Augenzahl, erhält doppelten Gewinn
                 player.updateBalance(bet.getAmount() * 2);
-                System.out.println("gewettet: " + bet.getAmount());
+
                // System.out.println("check die number");
 
             } else {
                 // Spieler verliert, Einsatz wird abgezogen
                 player.updateBalance(-bet.getAmount());
-                System.out.println("gewettet: " + bet.getAmount());
+                System.out.println("bet: " + bet.getAmount());
             }
 
             player.skipRound(); // nach dem Wetten soll der Player auf den Default gesetzt werden
@@ -101,7 +105,7 @@ public class Lobby implements Runnable {
                // System.out.println("information wird an spieler gesendet");
                 sender.sendRoundOutcome(player, number);
             } catch (Exception e) {
-                System.out.println("Fehler beim Senden der Ergebnisse an Spieler " + player.getName());
+                System.out.println("Error sending results to players " + player.getName());
             }
 
         }
@@ -114,7 +118,7 @@ public class Lobby implements Runnable {
                 startGame();
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
-                System.out.println("Lobby wurde unterbrochen");
+               // System.out.println("Lobby was interrupted");
                 Thread.currentThread().interrupt();
                 break;
             }

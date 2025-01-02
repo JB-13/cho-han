@@ -23,13 +23,13 @@ public class SendRequestToServer {
 
     public static boolean sendLoginRequest(String username, String password) throws Exception {
         String response;
-        System.out.println("Sende Login-Anfrage mit Benutzername: " + username);
+        System.out.println("Send login request with username: " + username);
             tcpSend.sendCode("LOG");
             tcpSend.sendString(username);
             tcpSend.sendString(password);
             response = tcpRec.receiveString();
 
-        System.out.println("Antwort vom Server: " + response);
+        System.out.println("Response from Server: " + response);
         if ("Login successful".equals(response)) {
             // Verbindung zum Spiel starten, wenn erfolgreich
             System.out.println("Login successful");

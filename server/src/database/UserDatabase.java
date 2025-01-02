@@ -14,7 +14,6 @@ public class UserDatabase {
 
     // Login-Validierung
     public static boolean validateLogin(String username, String password) {
-        System.out.println("Prüfe Login für Benutzer: " + username);
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(FILE_PATH), StandardCharsets.UTF_8))) {
             String line;
@@ -31,12 +30,12 @@ public class UserDatabase {
             }
 
             // Benutzer nicht vorhanden, erstelle neuen Eintrag
-            System.out.println("Benutzer nicht vorhanden, erstelle neuen Eintrag");
+            System.out.println("User doesnt exist, creating new entry");
             addUser(username, password);
             return true;
 
         } catch (IOException e) {
-            System.err.println("Fehler beim Überprüfen des Logins: " + e.getMessage());
+            System.err.println("Error validating login: " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -65,7 +64,7 @@ public class UserDatabase {
                 }
             }
         } catch (IOException | NumberFormatException e) {
-            System.err.println("Fehler beim Abrufen des Spielers: " + e.getMessage());
+            System.err.println("Error retrieving user: " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -79,7 +78,7 @@ public class UserDatabase {
             writer.write(line);
             writer.newLine();
         } catch (IOException e) {
-            System.err.println("Fehler beim Speichern des Benutzers: " + e.getMessage());
+            System.err.println("Error saving user: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -119,11 +118,11 @@ public class UserDatabase {
                 if (parts.length == 3) {
                     String username = parts[0];
                     double balance = Double.parseDouble(parts[2]);
-                    System.out.println("Benutzername: " + username + ", Balance: " + balance);
+                    System.out.println("Username: " + username + ", Balance: " + balance);
                 }
             }
         } catch (IOException | NumberFormatException e) {
-            System.err.println("Fehler beim Ausgeben der Benutzer: " + e.getMessage());
+            System.err.println("Error rendering users: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -156,7 +155,7 @@ public class UserDatabase {
 
             // Falls Benutzer nicht gefunden, Nachricht ausgeben
             if (!userFound) {
-                System.out.println("Benutzername nicht gefunden: " + username);
+                System.out.println("Username not found: " + username);
                 return;
             }
 
@@ -166,7 +165,7 @@ public class UserDatabase {
             }
 
         } catch (IOException e) {
-            System.err.println("Fehler beim Aktualisieren der Balance: " + e.getMessage());
+            System.err.println("Error updating balance: " + e.getMessage());
             e.printStackTrace();
         }
     }

@@ -31,11 +31,11 @@ public class Client {
                     }
                     break;
                 case "2":
-                    System.out.println("Programm soll beendet werden");
+                    System.out.println("Program will be closed");
                     entrance = false;
                     break;
                 default :
-                    System.out.println("keine Valide eingabe");
+                    System.out.println("no valid input");
                     break;
             }
         }
@@ -67,7 +67,7 @@ public class Client {
                 case "5":
                     SendRequestToServer.quitLobby(); gameloop = false; break;
                 default:
-                    System.out.println("ungültige Option");/* SendRequestToServer.skipRound(); */break;
+                    System.out.println("no valid Option");/* SendRequestToServer.skipRound(); */break;
 
 
             }

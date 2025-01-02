@@ -1,5 +1,6 @@
 package networkControllerServer;
 
+import gameLogic.Lobby;
 import gameLogic.Player;
 import networkControllerClient.HandleRequestFromServer;
 import networkControllerClient.TCPClient;
@@ -31,64 +32,79 @@ public class TCPServer implements Runnable {
              socket = new ServerSocket(port);
 
             while (true) {
-                System.out.println("Server hört auf TCP-Port: " + socket.getLocalPort ());
-                System.out.println("Warten auf Verbindungsaufbau");
-                try  {Socket connection = socket.accept(); //hier wird gewartet
+/*                if (socket.isClosed()){
+                    socket = new ServerSocket(port);
+                }*/
+
+                System.out.println("Server is listening on TCP-Port: " + socket.getLocalPort());
+                System.out.println("Waiting for connection to be established");
+
+                Player player = null;
+                try  {
+                    connection = socket.accept();//hier wird gewartet
                     InputStream in = connection.getInputStream();
                     OutputStream out = connection.getOutputStream();
 
-                    System.out.println("Verbindungsaufbau hat stattgefunden");
-
+                    System.out.println("Connection has been established");
                     tcpRec = new TCPReceive(in);
                     tcpSend = new TCPSend(out);
-                    // Warten auf Login-Daten
-                    String response = tcpRec.receiveCode();
-                    if (response.equals("CON")){
-                        tcpSend.sendCode("ACK");
-                    } else{
-                        continue;
-                    }
 
+                    connection.setSoTimeout(10000);
+                    // Warten auf Login-Daten
+
+                    player = null;
                     try {
+                        String response = tcpRec.receiveCode();
+                        if (!response.equals("CON")) {
+                            System.out.println("Invalid request from client. Connection is closed.");
+                            continue;
+                        }
+
+                        tcpSend.sendCode("ACK");
+
+
                         HandleRequestFromClient handler = HandleRequestFromClient.handleLogReg(this); //hier wird der Login empfangen
                         // Spieler-Objekt wurde erfolgreich erstellt, gehe zur Lobby-Zuweisung
-                        if (handler.equals(null)){
-
+                        if (handler == null) {
+                            System.err.println("Error creating player object. Connection is closed");
                             connection.close();
-                        } else{
-                        Player player = handler.getPlayer();  // Hole das Spielerobjekt
+                        }
+
+                        player = handler.getPlayer();
                         player.setTCPServer(this);
                         tcpSend.sendCode("CBA");
                         tcpSend.sendDouble(player.getBalance()); //sende Information an Client, wie vieln guthaben er hat
-                            Thread keepalive = new Thread(new KeepAlive((this)));
-                            keepalive.start();
+                        Thread keepalive = new Thread(new KeepAlive((this)));
+                        keepalive.start();
                         assignLobby(player); // Füge den Spieler zur Lobby hinzu
 
                         while (true) {
                             handler.handleRequest(player.getServer());  // Verarbeite Anforderungen des Spielers
-
-                        }
                         }
 
-                    } catch (IllegalArgumentException e) {
+
+                    } /* catch (IllegalArgumentException e) {
                        // System.out.println("Login fehlgeschlagen für: " + handler.getPlayer());
                         tcpSend.sendString("Login fehlgeschlagen: " + e.getMessage());
                     }
-
-
-                } catch (IOException | InterruptedException e) {
-                    System.err.println("Fehler bei der Verarbeitung der Verbindung: " + e.getMessage());
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    */ catch (IOException e) {
+                        System.err.println("Connection to Client lost: " + e.getMessage());
+                        Lobby.removePlayerFromLobby(player);
+                        connection.close();
+                    } catch (Exception e) {
+                        System.err.println("An unexpected error occurred: " + e.getMessage());
+                        Lobby.removePlayerFromLobby(player);
+                        connection.close();
+                    }
+                } catch (IOException e) {
+                    System.err.println("Error processing connection: " + e.getMessage());
+                    Lobby.removePlayerFromLobby(player);
+                    connection.close();
                 }
             }
-
         } catch (IOException e) {
-            System.err.println("Fehler beim Starten des Servers: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Error starting server: " + e.getMessage());
+
         }
     }
 
@@ -116,8 +132,15 @@ class KeepAlive implements Runnable{
 
 
             }
+        } catch (IOException e) {
+            System.err.println("Lost connection to Client: " + e.getMessage());
+        } catch (InterruptedException e) {
+            System.err.println("KeepAlive thread was interrupted: " + e.getMessage());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            System.err.println("An unexpected error occurred in the KeepAlive thread: " + e.getMessage());
+        } finally {
+            System.out.println("KeepAlive-Thread ended.");
+            Thread.currentThread().interrupt();
         }
     }
 

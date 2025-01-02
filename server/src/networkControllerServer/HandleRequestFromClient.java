@@ -41,7 +41,7 @@ public class HandleRequestFromClient {
                 double numAmount = server.getTcpRec().receiveDouble();
                 int number = server.getTcpRec().receiveInt();
                 if (number < 2 || number > 12) {
-                    System.out.println("Ungültige Augenzahl: " + number);
+                    System.out.println("Invalid number: " + number);
                     player.skipRound();
                 } else {
                     player.betNumber(number, numAmount);
@@ -59,7 +59,7 @@ public class HandleRequestFromClient {
                 break;
 
             default:
-                System.out.println("Unbekannter Code: " + code);
+                System.out.println("Invalid Code: " + code);
                 player.skipRound();
                 break;
         }

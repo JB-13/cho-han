@@ -110,23 +110,23 @@ public class TCPClient implements Runnable {
                     tcpSend.sendCode("CON");
                     String response = tcpRec.receiveCode();
                     if ("ACK".equals(response)) { // Server bestätigt mit "ACK"
-                        System.out.println ("Erfolgreich Verbunden mit " + socket.getInetAddress ( ).toString () + ":" + socket.getPort ());
+                        System.out.println ("Successfully connected with " + socket.getInetAddress ( ).toString () + ":" + socket.getPort ());
                         socket.setSoTimeout(5000);
                         return true;
                     } else {
-                        System.out.println("Server hat Verbindung abgelehnt.");
+                        System.out.println("Server declined connnection.");
                         socket.close(); // Verbindung schließen, falls keine Bestätigung
                     }
 
                 } catch (IOException e) {
-                    System.out.println("Port " + port + " ist nicht verfügbar oder wird schon benutzt");
+                    System.out.println("Port " + port + " is not available or is already in use");
                 } catch (Exception e) {
-                    System.out.println("Lesen hat zu lange gedauert");
+                    System.out.println("Reading took too long");
 
                 }
             }
 
-        System.out.println ("Erfolgreich Verbunden mit " + socket.getInetAddress ( ).toString () + ":" + socket.getPort ());
+        System.out.println ("Successfully connected with " + socket.getInetAddress ( ).toString () + ":" + socket.getPort ());
 
 
         return true;
@@ -142,10 +142,10 @@ public class TCPClient implements Runnable {
         try {
             if (socket != null && !socket.isClosed()) {
                 socket.close();
-                System.out.println("*****Verbindung zum Server geschlossen*****");
+                System.out.println("*****Connection to Server closed*****");
             }
         } catch (IOException e) {
-            System.err.println("Fehler beim Schließen der Verbindung: " + e.getMessage());
+            System.err.println("Error closing connection: " + e.getMessage());
         }
     }
 
