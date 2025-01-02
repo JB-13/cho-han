@@ -16,6 +16,7 @@ public class TCPClient implements Runnable {
     public static  TCPSend tcpSend  = null;
     public static  TCPReceive tcpRec  = null;
     public static Socket socket = null;
+    public static  Thread handler;
 
     @Override
     public void run() {
@@ -29,8 +30,9 @@ public class TCPClient implements Runnable {
 
         } finally {
             Thread.currentThread().interrupt();
-            disconnect(); // Verbindung trennen
-
+            if (!socket.isClosed()) {
+                disconnect(); // Verbindung trennen
+            }
 
 
         }
@@ -83,7 +85,7 @@ public class TCPClient implements Runnable {
     }
 
     public void startGameHandlerThread(){
-        Thread handler = new Thread(this);
+        handler = new Thread(this);
         handler.start();
 
     }
@@ -103,6 +105,7 @@ public class TCPClient implements Runnable {
 }
 
 class KeepAlive implements Runnable{
+    public static  Thread keepalive;
 
     @Override
     public void run() {
@@ -126,7 +129,7 @@ class KeepAlive implements Runnable{
     }
 
     public void startGameHandlerThread(){
-        Thread keepalive = new Thread(this);
+        keepalive = new Thread(this);
         keepalive.start();
 
     }

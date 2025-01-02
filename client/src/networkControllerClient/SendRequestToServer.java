@@ -15,6 +15,7 @@ public class SendRequestToServer {
 
         try {
             tcpClient.connect();
+            keepAlive.startGameHandlerThread(); //nach erfolgreichem connect, wird der keepAlive thread gestartet
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -36,7 +37,7 @@ public class SendRequestToServer {
             System.out.println("Login successful");
             HandleRequestFromServer.handleRequest();
             tcpClient.startGameHandlerThread(); // nach dem Login werden Keep ALive Messages vom Server empfangen
-            keepAlive.startGameHandlerThread();
+
             return true;
         } else {
             System.out.println("Login failed.");
@@ -195,6 +196,8 @@ public class SendRequestToServer {
 
     public static void quitLobby() throws Exception {
         tcpSend.sendCode("QUI");
+        TCPClient.handler.interrupt();
+        KeepAlive.keepalive.interrupt();
         tcpClient.disconnect();
     }
 
