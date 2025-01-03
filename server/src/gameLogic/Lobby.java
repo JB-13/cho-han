@@ -61,9 +61,6 @@ public class Lobby implements Runnable {
 
     public synchronized void connectPlayer (Player player) {
             players.add(player);
-        } else {
-            System.out.println("User " + player.getName() + " joined already a lobby.");
-        }
     }
 
 

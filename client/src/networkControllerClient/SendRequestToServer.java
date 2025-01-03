@@ -1,8 +1,10 @@
 package networkControllerClient;
 
+import connection.Client;
+
 import java.util.Scanner;
-import static networkControllerClient.TCPClient.tcpSend;
-import static networkControllerClient.TCPClient.tcpRec;
+
+import static networkControllerClient.TCPClient.*;
 
 
 public class SendRequestToServer {
@@ -14,30 +16,46 @@ public class SendRequestToServer {
         thread.start();*/
 
         try {
-            tcpClient.connect();
-            keepAlive.startGameHandlerThread(); //nach erfolgreichem connect, wird der keepAlive thread gestartet
+            if (tcpClient.connect()){
+                return true;
+            } else {
+                return false;
+            }
+            //keepAlive.startGameHandlerThread(); //nach erfolgreichem connect, wird der keepAlive thread gestartet
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            System.err.println("Error connecting to server: " + e.getMessage());
+            return false;
+
         }
 
-        return true;
     }
 
-    public static boolean sendLoginRequest(String username, String password) throws Exception {
-        String response;
+    public static boolean sendLoginRequest(String username, String password) {
+        String response="";
         System.out.println("Send login request with username: " + username);
+        try {
             tcpSend.sendCode("LOG");
             tcpSend.sendString(username);
             tcpSend.sendString(password);
             response = tcpRec.receiveString();
+        } catch (Exception e) {
+            System.err.println("Error sending Login information: " + e.getMessage());
+            return false;
+        }
+
 
         System.out.println("Response from Server: " + response);
         if ("Login successful".equals(response)) {
             // Verbindung zum Spiel starten, wenn erfolgreich
             System.out.println("Login successful");
-            HandleRequestFromServer.handleRequest();
+            try {
+                HandleRequestFromServer.handleRequest();
+            } catch (Exception e) {
+                System.err.println("Error receiving from Server: " + e.getMessage());
+                return false;
+            }
             tcpClient.startGameHandlerThread(); // nach dem Login werden Keep ALive Messages vom Server empfangen
-
+            keepAlive.startGameHandlerThread();
             return true;
         } else {
             System.out.println("Login failed.");
@@ -47,7 +65,7 @@ public class SendRequestToServer {
     }
 
 
-    public static void betOdd() throws Exception {
+    public static void betOdd()  {
         double amount = 0.0;
         boolean validBet = false;
         double currentBalance = 0.0;
@@ -60,6 +78,11 @@ public class SendRequestToServer {
 
         while(!validBet) {
             try {
+                if (socket.isClosed()) {
+                    Client.gameloop = false;
+                    Client.isLoggedIn = false;
+                    return;
+                }
                 System.out.println("how many points are you betting?");
                 amount = sc.nextDouble();
 
@@ -76,18 +99,29 @@ public class SendRequestToServer {
 
                 validBet = true;
             } catch (Exception e) {
-                System.out.println("Invalid Input");
-                sc.nextLine();
+                if (!socket.isClosed()){
+                    System.out.println("Invalid Input");
+                    sc.nextLine();
+                }
+
+
             }
         }
 
-        tcpSend.sendCode("ODD");
-        tcpSend.sendDouble(amount);
+        try {
+            tcpSend.sendCode("ODD");
+            tcpSend.sendDouble(amount);
+        } catch (Exception e) {
+            System.err.println("Error sending to Server: " + e.getMessage());
+            Client.setGameloop(false);
+
+        }
+
         System.out.println("You placed an ODD bet of " + amount + " points.");
 
     }
 
-    public static void betEven() throws Exception {
+    public static void betEven()  {
         double amount = 0.0;
         boolean validBet = false;
         double currentBalance = 0.0;
@@ -101,6 +135,11 @@ public class SendRequestToServer {
         while(!validBet) {
             try {
                 System.out.println("how many points are you betting?");
+                if (socket.isClosed()) {
+                    Client.gameloop = false;
+                    Client.isLoggedIn = false;
+                    return;
+                }
                 amount = sc.nextDouble();
 
                 if (amount <= 0) {
@@ -117,17 +156,25 @@ public class SendRequestToServer {
 
                 validBet = true;
             } catch (Exception e) {
-                System.out.println("Invalid Input");
-                sc.nextLine();
+                if (!socket.isClosed()){
+                    System.out.println("Invalid Input");
+                    sc.nextLine();
+                }
             }
         }
 
 
-        tcpSend.sendCode("EVE");
-        tcpSend.sendDouble(amount);
+        try {
+            tcpSend.sendCode("EVE");
+            tcpSend.sendDouble(amount);
+        } catch (Exception e) {
+            System.err.println("Error sending to Server: " + e.getMessage());
+            Client.setGameloop(false);
+        }
+
         System.out.println("You placed an EVEN bet of " + amount + " points.");
     }
-    public static void betNum() throws Exception {
+    public static void betNum() {
         double amount = 0.0;
         int number = 0;
         double currentBalance = 0.0;
@@ -140,6 +187,11 @@ public class SendRequestToServer {
         // Eingabe des Wetteinsatzes
         while (true) {
             try {
+                if (socket.isClosed()) {
+                    Client.gameloop = false;
+                    Client.isLoggedIn = false;
+                    return;
+                }
                 System.out.println("How many points are you betting?");
                 amount = sc.nextDouble();
 
@@ -157,14 +209,21 @@ public class SendRequestToServer {
 
                 break; // Gültige Eingabe
             } catch (Exception e) {
-                System.out.println("Invalid input. Please enter a valid number.");
-                sc.next(); // Ungültige Eingabe löschen
+                if (!socket.isClosed()){
+                    System.out.println("Invalid Input");
+                    sc.nextLine(); // Ungültige Eingabe löschen
+                }
             }
         }
 
         // Eingabe der Augenzahl
         while (true) {
             try {
+                if (socket.isClosed()) {
+                    Client.gameloop = false;
+                    Client.isLoggedIn = false;
+                    return;
+                }
                 System.out.println("Select your die count (2-12):");
                 number = sc.nextInt();
 
@@ -175,27 +234,55 @@ public class SendRequestToServer {
                 }
                 break; // Gültige Eingabe
             } catch (Exception e) {
-                System.out.println("Invalid input. Please enter a valid integer between 2 and 12.");
-                sc.next(); // Ungültige Eingabe löschen
+                if (!socket.isClosed()){
+                    System.out.println("Invalid input. Please enter a valid integer between 2 and 12.");
+                    sc.next(); // Ungültige Eingabe löschen
+                }
             }
         }
 
 
-        tcpSend.sendCode("NUM");
-        tcpSend.sendDouble(amount);
-        tcpSend.sendInt(number);
+        try {
+            tcpSend.sendCode("NUM");
+            tcpSend.sendDouble(amount);
+            tcpSend.sendInt(number);
+        } catch (Exception e) {
+            System.err.println("Error sending to Server: " + e.getMessage());
+            Client.setGameloop(false);
+        }
+
 
         System.out.println("Your bet has been placed: " + amount + " points on die count " + number);
 
     }
-    public static void skipRound() throws Exception {
-        tcpSend.sendCode("SKI");
+    public static void skipRound()  {
+        try {
+            if (socket.isClosed()) {
+                Client.gameloop = false;
+                Client.isLoggedIn = false;
+                return;
+            }
+            tcpSend.sendCode("SKI");
+        } catch (Exception e) {
+            System.err.println("Error sending to Server: " + e.getMessage());
+            Client.setGameloop(false);
+        }
         //   HandleRequestFromServer.handleRoundOutcome();
 
     }
 
-    public static void quitLobby() throws Exception {
-        tcpSend.sendCode("QUI");
+    public static void quitLobby() {
+        try {
+            if (socket.isClosed()) {
+                Client.gameloop = false;
+                Client.isLoggedIn = false;
+                return;
+            }
+            tcpSend.sendCode("QUI");
+        } catch (Exception e) {
+            System.err.println("Error sending to Server: " + e.getMessage());
+            Client.setGameloop(false);
+        }
         TCPClient.handler.interrupt();
         KeepAlive.keepalive.interrupt();
         tcpClient.disconnect();

@@ -11,12 +11,14 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.sql.SQLOutput;
 
 public class TCPClient implements Runnable {
     public static  TCPSend tcpSend  = null;
     public static  TCPReceive tcpRec  = null;
     public static Socket socket = null;
     public static  Thread handler;
+    public static boolean serverNotResponding =false;
 
     @Override
     public void run() {
@@ -25,7 +27,11 @@ public class TCPClient implements Runnable {
                 HandleRequestFromServer.handleRequest();
             }
         } catch (Exception e) {
-            System.out.println("Server is not responding anymore");
+           if (!socket.isClosed()) {
+               System.out.println("Server is not responding anymore");
+               serverNotResponding = true;
+           }
+
 
 
         } finally {
@@ -72,14 +78,14 @@ public class TCPClient implements Runnable {
 
                 } catch (IOException e) {
                     System.out.println("Port " + port + " is not available or is already in use");
+                    if (i == 50050){
+                        return false;
+                    }
                 } catch (Exception e) {
                     System.out.println("Reading took too long");
 
                 }
             }
-
-        System.out.println ("Successfully connected with " + socket.getInetAddress ( ).toString () + ":" + socket.getPort ());
-
 
         return true;
     }
@@ -112,7 +118,6 @@ class KeepAlive implements Runnable{
         try {
             while (!Thread.currentThread().isInterrupted()) {
                TCPClient.tcpSend.sendCode("ALI");
-                System.out.println("keep alive");
                 Thread.sleep(5000);
 
             }
@@ -125,6 +130,11 @@ class KeepAlive implements Runnable{
         } finally {
             System.out.println("KeepAlive-Thread finished.");
             Thread.currentThread().interrupt();
+            if (TCPClient.serverNotResponding){
+                System.out.println("Press any button to continue");
+                TCPClient.serverNotResponding = false;
+            }
+
         }
     }
 

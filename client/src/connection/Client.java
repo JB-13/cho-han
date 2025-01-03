@@ -11,12 +11,12 @@ import static networkControllerClient.TCPClient.socket;
 
 public class Client {
     static  boolean entrance = true;
-    static boolean gameloop = true;
+   public static boolean gameloop = true;
     static String option = "";
     static Scanner sc = new Scanner(System.in);
-    static boolean isLoggedIn = false;
+    public static boolean isLoggedIn = false;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
         //aüßere Schleife für den ersten Screen
         while (entrance){
@@ -26,7 +26,10 @@ public class Client {
             option = sc.next();
             switch(option){
                 case "1":
-                    SendRequestToServer.connectToServer();
+                   if(!SendRequestToServer.connectToServer()){
+                       System.out.println("Connecting to Server failed");
+                       break;
+                   }
                     login();
                     if (isLoggedIn) {
                         gameLoopView();
@@ -45,7 +48,7 @@ public class Client {
 
     }
 
-    public static void gameLoopView() throws Exception {
+    public static void gameLoopView(){
         gameloop = true; //setze auf true falls nicht geschehen
         // if methoden aufruf zum connecten = true
         // else retrun;
@@ -94,7 +97,7 @@ public class Client {
 
     }
 
-    public static void login() throws Exception {
+    public static void login(){
         System.out.println("Enter your username:");
         String username = sc.next();
         System.out.println("Enter your password:");
@@ -107,6 +110,10 @@ public class Client {
         }
     }
 
+    public static void setGameloop(boolean bool){
+        gameloop = bool;
+
+    }
 
 
 
