@@ -49,12 +49,17 @@ public class Lobby implements Runnable {
         return false; // Spieler war in keiner Lobby
     }
 
+    public boolean containsPlayer(String username) {
+        return players.stream().anyMatch(player -> player.getName().equals(username));
+    }
+
+
+
     public int getLobbySize() {
         return players.size();
     }
 
     public synchronized void connectPlayer (Player player) {
-        if (!players.contains(player)) { // Prüfe, ob der Spieler bereits in der Liste ist
             players.add(player);
         } else {
             System.out.println("User " + player.getName() + " joined already a lobby.");
@@ -64,6 +69,13 @@ public class Lobby implements Runnable {
 
 
     public static Lobby assignLobby(Player player) {
+        // Überprüfe, ob der Spieler bereits einer Lobby zugeordnet ist
+        for (Lobby lobby : Lobbies) {
+            if (lobby.containsPlayer(player.getName())) {
+                System.out.println("User " + player.getName() + " is already in a lobby.");
+                return null; // Der Spieler ist bereits in einer Lobby
+            }
+        }
 
         // Prüfe, ob es eine freie Lobby gibt
         for (Lobby lobby : Lobbies) {

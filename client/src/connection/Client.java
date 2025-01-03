@@ -6,6 +6,8 @@ import networkControllerClient.TCPClient;
 
 import java.util.Scanner;
 
+import static networkControllerClient.TCPClient.socket;
+
 
 public class Client {
     static  boolean entrance = true;
@@ -54,23 +56,37 @@ public class Client {
         System.out.println("4) skip round");
         System.out.println("5) exit lobby");
         while (gameloop){ //zweite schleife für das Spiel selbst
-            option = sc.next();
-            switch (option){
-                case "1":
-                    SendRequestToServer.betOdd(); break;
-                case "2":
-                    SendRequestToServer.betEven(); break;
-                case "3":
-                    SendRequestToServer.betNum(); break;
-                case "4":
-                    SendRequestToServer.skipRound(); break;
-                case "5":
-                    SendRequestToServer.quitLobby(); gameloop = false; break;
-                default:
-                    System.out.println("no valid Option");/* SendRequestToServer.skipRound(); */break;
-
-
+            if (socket.isClosed()) {
+                gameloop = false;
+                isLoggedIn = false;
+                break;
             }
+            option = sc.next();
+                switch (option) {
+                    case "1":
+                        SendRequestToServer.betOdd();
+                        break;
+                    case "2":
+                        SendRequestToServer.betEven();
+                        break;
+                    case "3":
+                        SendRequestToServer.betNum();
+                        break;
+                    case "4":
+                        SendRequestToServer.skipRound();
+                        break;
+                    case "5":
+                        SendRequestToServer.quitLobby();
+                        gameloop = false;
+                        break;
+                    default:
+                        if (!socket.isClosed()){
+                            System.out.println("no valid Option");
+                        }
+                        break;
+
+
+                }
 
 
 
