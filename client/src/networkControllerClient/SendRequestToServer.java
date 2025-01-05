@@ -73,6 +73,11 @@ public class SendRequestToServer {
 
         currentBalance = HandleRequestFromServer.getBalance();
 
+        if (currentBalance <= 0) {
+            System.out.println("You are bankrupt. Your balance is: " + currentBalance + ". You can only Skip(4) or Exit(5)");
+            return;
+        }
+
 
 
 
@@ -85,6 +90,12 @@ public class SendRequestToServer {
                 }
                 System.out.println("how many points are you betting?");
                 amount = sc.nextDouble();
+                currentBalance = HandleRequestFromServer.getBalance();
+
+                if (currentBalance <= 0) {
+                    System.out.println("You are bankrupt. Your balance is: " + currentBalance + ". You can only Skip(4) or Exit(5)");
+                    return;
+                }
 
                 if (amount <= 0) {
                     System.out.println("Bet must be greater than zero. Type again");
@@ -130,6 +141,11 @@ public class SendRequestToServer {
 
         currentBalance = HandleRequestFromServer.getBalance();
 
+        if (currentBalance <= 0) {
+            System.out.println("You are bankrupt. Your balance is: " + currentBalance + ". You can only Skip(4) or Exit(5)");
+            return;
+        }
+
 
 
         while(!validBet) {
@@ -141,6 +157,12 @@ public class SendRequestToServer {
                     return;
                 }
                 amount = sc.nextDouble();
+                currentBalance = HandleRequestFromServer.getBalance();
+
+                if (currentBalance <= 0) {
+                    System.out.println("You are bankrupt. Your balance is: " + currentBalance + ". You can only Skip(4) or Exit(5)");
+                    return;
+                }
 
                 if (amount <= 0) {
                     System.out.println("Bet must be greater than zero. Type again");
@@ -183,6 +205,11 @@ public class SendRequestToServer {
 
         currentBalance = HandleRequestFromServer.getBalance();
 
+        if (currentBalance <= 0) {
+            System.out.println("You are bankrupt. Your balance is: " + currentBalance + ". You can only Skip(4) or Exit(5)");
+            return;
+        }
+
 
         // Eingabe des Wetteinsatzes
         while (true) {
@@ -194,6 +221,12 @@ public class SendRequestToServer {
                 }
                 System.out.println("How many points are you betting?");
                 amount = sc.nextDouble();
+                currentBalance = HandleRequestFromServer.getBalance();
+
+                if (currentBalance <= 0) {
+                    System.out.println("You are bankrupt. Your balance is: " + currentBalance + ". You can only Skip(4) or Exit(5)");
+                    return;
+                }
 
                 // Überprüfen, ob der Spieler genügend Guthaben hat
                 if (amount <= 0) {
@@ -226,6 +259,12 @@ public class SendRequestToServer {
                 }
                 System.out.println("Select your die count (2-12):");
                 number = sc.nextInt();
+                currentBalance = HandleRequestFromServer.getBalance();
+
+                if (currentBalance <= 0) {
+                    System.out.println("You are bankrupt. Your balance is: " + currentBalance + ". You can only Skip(4) or Exit(5)");
+                    return;
+                }
 
                 // Überprüfen, ob die Augenzahl gültig ist
                 if (number < 2 || number > 12) {
