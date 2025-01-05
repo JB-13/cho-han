@@ -74,6 +74,8 @@ public class TCPServer implements Runnable {
                         if (handler == null) {
                             System.err.println("Error creating player object. Connection is closed");
                             connection.close();
+                            socket.close();
+                            continue;
                         }
 
                         player = handler.getPlayer();
