@@ -59,7 +59,7 @@ public class TCPClient implements Runnable {
             port = i;
                 try {
                     socket = new Socket (address, port);
-                    socket.setSoTimeout(100); //keep alive msg eventuell notwendig
+                    socket.setSoTimeout(300); //keep alive msg eventuell notwendig
                     out = socket.getOutputStream ( );
                     in = socket.getInputStream ( );
                     tcpSend = new TCPSend (out);
@@ -96,7 +96,7 @@ public class TCPClient implements Runnable {
 
     }
 
-    public synchronized void disconnect() {
+    public static synchronized void disconnect() {
         try {
             if (socket != null && !socket.isClosed()) {
                 socket.close();

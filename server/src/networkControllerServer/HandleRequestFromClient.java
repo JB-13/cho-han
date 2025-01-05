@@ -55,6 +55,7 @@ public class HandleRequestFromClient {
             case "QUI":
                 player.skipRound();
                 Lobby.removePlayerFromLobby(player);
+
                 server.setActive(false);
                 break;
             case "ALI":break;

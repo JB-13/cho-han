@@ -124,6 +124,9 @@ public class TCPServer implements Runnable {
     public void setActive(boolean active) {
         this.active = active;
     }
+/*    public void closeConnection() {
+        connection.close();
+    }*/
 }
 
 class KeepAlive implements Runnable{

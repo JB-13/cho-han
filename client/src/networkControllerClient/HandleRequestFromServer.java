@@ -1,5 +1,7 @@
 package networkControllerClient;
 
+import connection.Client;
+
 import static networkControllerClient.TCPClient.tcpRec;
 
 public class HandleRequestFromServer {

@@ -52,6 +52,14 @@ public class Client {
         gameloop = true; //setze auf true falls nicht geschehen
         // if methoden aufruf zum connecten = true
         // else retrun;
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        if (!gameloop){
+            return;
+        }
         System.out.println("choose your option by inputing a number");
         System.out.println("1) bet odd");
         System.out.println("2) bet even");
