@@ -55,7 +55,7 @@ public class TCPServer implements Runnable {
                     tcpRec = new TCPReceive(in);
                     tcpSend = new TCPSend(out);
 
-                    connection.setSoTimeout(10000);
+                    connection.setSoTimeout(30000);
                     // Warten auf Login-Daten
 
                     player = null;
@@ -98,21 +98,24 @@ public class TCPServer implements Runnable {
                         System.err.println("Connection to Client lost: " + e.getMessage());
                         Lobby.removePlayerFromLobby(player);
                         connection.close();
+                        socket.close();
                     } catch (Exception e) {
                         System.err.println("An unexpected error occurred: " + e.getMessage());
                         Lobby.removePlayerFromLobby(player);
                         connection.close();
+                        socket.close();
                     }
 
                 } catch (IOException e) {
                     System.err.println("Error processing connection: " + e.getMessage());
                     Lobby.removePlayerFromLobby(player);
                     connection.close();
+                    socket.close();
                 }
+
             }
         } catch (IOException e) {
             System.err.println("Error starting server: " + e.getMessage());
-
         }
     }
 
@@ -136,6 +139,8 @@ public class TCPServer implements Runnable {
         }
 
     }
+
+
 }
 
 class KeepAlive implements Runnable{
