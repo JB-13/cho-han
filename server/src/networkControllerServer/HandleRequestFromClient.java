@@ -16,8 +16,8 @@ public class HandleRequestFromClient {
 
 
     public HandleRequestFromClient(String username){
-            this.player = UserDatabase.getPlayer(username);
-            //assignLobby(player); // Spieler einer Lobby zuweisen (wird bereits in TCPServer getan
+        this.player = UserDatabase.getPlayer(username);
+        //assignLobby(player); // Spieler einer Lobby zuweisen (wird bereits in TCPServer getan
     }
 
     public Player getPlayer() {
@@ -55,8 +55,8 @@ public class HandleRequestFromClient {
             case "QUI":
                 player.skipRound();
                 Lobby.removePlayerFromLobby(player);
-
                 server.setActive(false);
+                server.closeConnection();
                 break;
             case "ALI":break;
 

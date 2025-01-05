@@ -32,9 +32,12 @@ public class TCPServer implements Runnable {
     public void run() {
 
         try {
-            socket = new ServerSocket(port, 50, InetAddress.getByName("0.0.0.0"));
+/*            socket = new ServerSocket(port, 50, InetAddress.getByName("0.0.0.0"));
+            socket.setReuseAddress(true);*/
 
             while (true) {
+                socket = new ServerSocket(port, 50, InetAddress.getByName("0.0.0.0"));
+                socket.setReuseAddress(true);
 /*                if (socket.isClosed()){
                     socket = new ServerSocket(port);
                 }*/
@@ -124,9 +127,15 @@ public class TCPServer implements Runnable {
     public void setActive(boolean active) {
         this.active = active;
     }
-/*    public void closeConnection() {
-        connection.close();
-    }*/
+    public void closeConnection() {
+        try {
+            this.connection.close();
+            socket.close();
+        } catch (IOException e) {
+            System.err.println("Error closing connection: " + e.getMessage());
+        }
+
+    }
 }
 
 class KeepAlive implements Runnable{
