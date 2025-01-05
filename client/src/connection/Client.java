@@ -53,7 +53,7 @@ public class Client {
         // if methoden aufruf zum connecten = true
         // else retrun;
         try {
-            Thread.sleep(200);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

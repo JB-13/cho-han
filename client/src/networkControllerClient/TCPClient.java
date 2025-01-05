@@ -51,7 +51,7 @@ public class TCPClient implements Runnable {
         OutputStream out = null;
         InputStream in = null;
         try {
-            address = InetAddress.getByName ("127.0.0.1");
+            address = InetAddress.getByName ("31.19.170.64");
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }
