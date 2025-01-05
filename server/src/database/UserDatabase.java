@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UserDatabase {
-    private static final String FILE_PATH = "users.txt";
+    private static final String FILE_PATH = "server/src/database/users.txt";
 
 
     // Login-Validierung
