@@ -69,7 +69,7 @@ public class TCPClient implements Runnable {
                     String response = tcpRec.receiveCode();
                     if ("ACK".equals(response)) { // Server bestätigt mit "ACK"
                         System.out.println ("Successfully connected with " + socket.getInetAddress ( ).toString () + ":" + socket.getPort ());
-                        socket.setSoTimeout(5000);
+                        socket.setSoTimeout(15000);
                         return true;
                     } else {
                         System.out.println("Server declined connnection.");

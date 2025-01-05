@@ -7,6 +7,12 @@ public class HandleRequestFromServer {
     public static void handleRequest() throws Exception {
         String code = tcpRec.receiveCode();
         switch (code){
+            case "ERR":
+                System.out.println("You are already in a lobbby. You are getting disconnected.");
+                TCPClient.disconnect();
+                Client.gameloop = false;
+                Client.isLoggedIn = false;
+                break;
             case "IOD":
                 System.out.println("=========================");
                 System.out.println("odd die count"); break;

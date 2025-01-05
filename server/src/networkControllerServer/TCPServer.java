@@ -10,6 +10,7 @@ import networkControllerServer.marshalling.TCPSend;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -31,7 +32,7 @@ public class TCPServer implements Runnable {
     public void run() {
 
         try {
-            socket = new ServerSocket(port);
+            socket = new ServerSocket(port, 50, InetAddress.getByName("0.0.0.0"));
 
             while (true) {
 /*                if (socket.isClosed()){
