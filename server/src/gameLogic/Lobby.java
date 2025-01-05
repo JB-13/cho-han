@@ -135,14 +135,14 @@ public class Lobby implements Runnable {
 
             } else if ((bet.isOdd() && dealer.isOdd(number))) {
                 // Spieler gewinnt bei "Odd", erhält Gewinn
-                player.updateBalance(bet.getAmount() * 2);
+                player.updateBalance(bet.getAmount());
                 System.out.println("Player: " + player.getName() + " with odd bet: " + bet.getAmount() + " and balance: " + player.getBalance());
 
                 // System.out.println("check die number");
 
             } else if (bet.getNumber() == number) {
                 // Spieler gewinnt bei spezifischer Augenzahl, erhält doppelten Gewinn
-                player.updateBalance(bet.getAmount() * 2);
+                player.updateBalance(bet.getAmount() * 3);
                 System.out.println("Player: " + player.getName() + " with num " + bet.getNumber() + " bet: " + bet.getAmount() + " and balance: " + player.getBalance());
 
                 // System.out.println("check die number");
