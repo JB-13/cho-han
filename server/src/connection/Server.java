@@ -13,9 +13,9 @@ public class Server {
     public static void main(String[] args) {
 
 
-        ExecutorService executor = Executors.newFixedThreadPool(15);
+        ExecutorService executor = Executors.newFixedThreadPool(50);
        // executor.execute(server);
-       for (int i = 50000; i < 50010; i++) {
+       for (int i = 50000; i < 50050; i++) {
             executor.submit(new TCPServer(i));
 
         }
