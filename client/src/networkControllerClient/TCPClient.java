@@ -44,7 +44,7 @@ public class TCPClient implements Runnable {
         }
     }
 
-
+    //Mit der jeweiligen IP-Adresse verbinden (zum Server)
     public synchronized boolean connect(){
         int port;
         InetAddress address = null;

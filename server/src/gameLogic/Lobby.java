@@ -31,6 +31,7 @@ public class Lobby implements Runnable {
         return id;
     }
 
+    //Spieler von einer Lobby entfernen
     public static synchronized boolean removePlayerFromLobby(Player player) {
         for (Lobby lobby : Lobbies) { // Durchsuche alle Lobbies
             if (lobby.players.contains(player)) { // Spieler gefunden
@@ -49,22 +50,25 @@ public class Lobby implements Runnable {
         return false; // Spieler war in keiner Lobby
     }
 
+    //Spieler in einer Lobby suchen
     public boolean containsPlayer(String username) {
         return players.stream().anyMatch(player -> player.getName().equals(username));
     }
 
 
-
+    //Lobbygröße ausgeben
     public int getLobbySize() {
         return players.size();
     }
 
+    //Spieler zur Liste von Spielern hinzufügen
     public synchronized void connectPlayer (Player player) {
         players.add(player);
     }
 
 
 
+    //Spieler einer Lobby zuweisen
     public static Lobby assignLobby(Player player) {
         // Überprüfe, ob der Spieler bereits einer Lobby zugeordnet ist
         for (Lobby lobby : Lobbies) {
@@ -99,6 +103,7 @@ public class Lobby implements Runnable {
     }
 
 
+    //Spiel innerhalb einer Lobby starten
     public void startGame(){
         try {
             Thread.sleep(15000); // Wartezeit für Wetten

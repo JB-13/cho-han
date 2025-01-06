@@ -47,7 +47,7 @@ public class Client {
 
 
     }
-
+    //Menü für den Client
     public static void gameLoopView(){
         gameloop = true; //setze auf true falls nicht geschehen
         // if methoden aufruf zum connecten = true
@@ -104,7 +104,7 @@ public class Client {
         }
 
     }
-
+    //Login Menü für den Client
     public static void login(){
         System.out.println("Enter your username:");
         String username = sc.next();
@@ -118,6 +118,7 @@ public class Client {
         }
     }
 
+    //Menü loop für den Client
     public static void setGameloop(boolean bool){
         gameloop = bool;
 

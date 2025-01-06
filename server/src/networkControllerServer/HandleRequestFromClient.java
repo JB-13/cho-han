@@ -24,6 +24,7 @@ public class HandleRequestFromClient {
         return player;
     }
 
+    //Codes wie im Protokoll beschrieben
     public void handleRequest(TCPServer server) throws Exception {
         String code = server.getTcpRec().receiveCode();
         switch (code) {
@@ -68,6 +69,7 @@ public class HandleRequestFromClient {
     }
 
 
+    //Login Informationen vom Client verarbeiten
     public static HandleRequestFromClient handleLogReg(TCPServer server) throws Exception {
         String code = server.getTcpRec().receiveCode();
         if (code.equals("LOG")) {

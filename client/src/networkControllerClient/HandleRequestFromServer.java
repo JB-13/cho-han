@@ -6,6 +6,7 @@ import static networkControllerClient.TCPClient.tcpRec;
 
 public class HandleRequestFromServer {
     private static double balance = 1000.0;
+    //Codes wie im Protokoll beschrieben
     public static void handleRequest() throws Exception {
         String code = tcpRec.receiveCode();
         switch (code){
@@ -42,6 +43,7 @@ public class HandleRequestFromServer {
         }
     }
 
+    //Kontostand abrufen
     public static double getBalance(){
         return balance;
 

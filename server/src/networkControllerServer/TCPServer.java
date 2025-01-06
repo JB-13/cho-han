@@ -145,6 +145,7 @@ public class TCPServer implements Runnable {
 
 }
 
+//KeepAlive zum konstanten Überprüfen der Verbindung
 class KeepAlive implements Runnable{
     private TCPServer server;
     public KeepAlive(TCPServer server) {

@@ -29,7 +29,7 @@ public class SendRequestToServer {
         }
 
     }
-
+    //Login-Informationen senden
     public static boolean sendLoginRequest(String username, String password) {
         String response="";
         System.out.println("Send login request with username: " + username);
@@ -43,7 +43,7 @@ public class SendRequestToServer {
             return false;
         }
 
-
+        //Überprüfen was der Server übermittelt hat
         System.out.println("Response from Server: " + response);
         if ("Login successful".equals(response)) {
             // Verbindung zum Spiel starten, wenn erfolgreich
@@ -64,7 +64,7 @@ public class SendRequestToServer {
 
     }
 
-
+    //Ungerade wetten
     public static void betOdd()  {
         double amount = 0.0;
         boolean validBet = false;
@@ -132,6 +132,7 @@ public class SendRequestToServer {
 
     }
 
+    //Gerade wetten
     public static void betEven()  {
         double amount = 0.0;
         boolean validBet = false;
@@ -196,6 +197,8 @@ public class SendRequestToServer {
 
         System.out.println("You placed an EVEN bet of " + amount + " points.");
     }
+
+    //Auf genaue Zahl wetten
     public static void betNum() {
         double amount = 0.0;
         int number = 0;
@@ -294,6 +297,8 @@ public class SendRequestToServer {
         System.out.println("Your bet has been placed: " + amount + " points on die count " + number);
 
     }
+
+    //Runde überspringen
     public static void skipRound()  {
         try {
             if (socket.isClosed()) {
@@ -310,6 +315,7 @@ public class SendRequestToServer {
 
     }
 
+    //Lobby verlassen
     public static void quitLobby() {
         try {
             if (socket.isClosed()) {

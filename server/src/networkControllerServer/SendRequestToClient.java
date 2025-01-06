@@ -15,6 +15,7 @@ public class SendRequestToClient {
         this.dealer = dealer;
     }
 
+    //Wurf dem Spieler vermitteln
     public void sendRoundOutcome(Player player, int rolledNumber) throws Exception {
         if (dealer.isOdd(rolledNumber)) {
             player.getServer().getTcpSend().sendCode("IOD");

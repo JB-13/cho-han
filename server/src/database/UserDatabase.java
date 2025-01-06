@@ -20,8 +20,8 @@ public class UserDatabase {
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(";");
                 if (parts.length == 3) {
-                    String fileUsername = parts[0];
-                    String filePassword = parts[1];
+                    String fileUsername = parts[0]; //Username ist erster Teil in txt Datei
+                    String filePassword = parts[1]; //Passwort ist zweiter Teil in txt Datei
 
                     if (fileUsername.equals(username)) {
                         return filePassword.equals(password);
