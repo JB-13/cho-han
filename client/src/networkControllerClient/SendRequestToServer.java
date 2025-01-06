@@ -49,7 +49,7 @@ public class SendRequestToServer {
             // Verbindung zum Spiel starten, wenn erfolgreich
             System.out.println("Login successful");
             try {
-                HandleRequestFromServer.handleRequest();
+                HandleRequestFromServer.handleRequest(); //für CBA
             } catch (Exception e) {
                 System.err.println("Error receiving from Server: " + e.getMessage());
                 return false;
