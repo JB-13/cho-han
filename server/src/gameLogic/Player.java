@@ -1,11 +1,17 @@
 package gameLogic;
 
 
-public class Player {
+import networkControllerServer.TCPServer;
+
+import java.io.Serializable;
+
+public class Player implements Serializable {
+    private static final long serialVersionUID = 6076348035636872825L;
     private String name;
     private String password;
     private Double balance;
     private Bet bet;
+    private TCPServer server;
 
     public Player(String name, String password, Double balance) {
         this.name = name;
@@ -19,6 +25,13 @@ public class Player {
         this.password = password;
         this.setBalance(1000.0);
         this.bet = new Bet();
+    }
+
+    public TCPServer getServer() {
+        return server;
+    }
+    public void setTCPServer(TCPServer server){
+        this.server = server;
     }
 
     public String getName() {

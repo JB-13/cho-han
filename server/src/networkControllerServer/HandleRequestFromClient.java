@@ -1,20 +1,26 @@
 package networkControllerServer;
 
 
+import database.UserDatabase;
 import gameLogic.Lobby;
 import gameLogic.Player;
+
 
 
 public class HandleRequestFromClient {
 
     private Player player; // Der aktuelle Spieler
-    private Lobby lobby;   // Die zugewiesene Lobby
 
-    public HandleRequestFromClient(Player player) {
-        this.player = player;
-        this.lobby = Lobby.assignLobby(player); // Spieler einer Lobby zuweisen
+
+    public HandleRequestFromClient(String username){
+        this.player = UserDatabase.getPlayer(username);
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
+    //Codes wie im Protokoll beschrieben
     public void handleRequest(TCPServer server) throws Exception {
         String code = server.getTcpRec().receiveCode();
         switch (code) {
@@ -32,7 +38,7 @@ public class HandleRequestFromClient {
                 double numAmount = server.getTcpRec().receiveDouble();
                 int number = server.getTcpRec().receiveInt();
                 if (number < 2 || number > 12) {
-                    System.out.println("Ungültige Augenzahl: " + number);
+                    System.out.println("Invalid number: " + number);
                     player.skipRound();
                 } else {
                     player.betNumber(number, numAmount);
@@ -44,26 +50,45 @@ public class HandleRequestFromClient {
                 break;
 
             case "QUI":
-                player.skipRound(); // Spieler setzt aus
-                // lobby.stopLobby();  // Lobby beenden, falls nötig
+                player.skipRound();
+                Lobby.removePlayerFromLobby(player);
+                server.setActive(false);
+                server.closeConnection();
                 break;
+            case "ALI":break;
 
             default:
-                System.out.println("Unbekannter Code: " + code);
+                System.out.println("Invalid Code: " + code);
                 player.skipRound();
                 break;
         }
     }
 
-    public static Player handleLogin(String code, String name, String passwort,TCPServer server){
-        if (code.equals("LOG")){
-        Player p = new Player(name,passwort,server);
-        return p;
-        } else {
-            return null;
+
+    //Login Informationen vom Client verarbeiten
+    public static HandleRequestFromClient handleLogReg(TCPServer server) throws Exception {
+        String code = server.getTcpRec().receiveCode();
+        if (code.equals("LOG")) {
+            String loginUsername = server.getTcpRec().receiveString();
+            String loginPassword = server.getTcpRec().receiveString();
+            try {
+                if (UserDatabase.validateLogin(loginUsername, loginPassword)) {
+                    server.getTcpSend().sendString("Login successful");
+                    return new HandleRequestFromClient(loginUsername);
+                } else {
+                    server.getTcpSend().sendString("Invalid credentials");
+                }
+            } catch (Exception e) {
+                server.getTcpSend().sendString("Login failed: " + e.getMessage());
+            }
         }
+        return null;
     }
+
 }
+
+
+
 
 /*
 Player Actions (off server)
@@ -73,9 +98,13 @@ connect to server: CON
 
 Player Action (on server)
 ===========================
+login: LOG | username (string) | password(string)
+confirm connection: ACK
+keep Alive Messages: ALI
 odd: ODD | amount (double)
 even: EVE | amount (double)
 bet number: NUM | amount (double) | 2-12(int)
 skip: SKI
 quit: from sever QUI
-===========================*/
+===========================
+*/

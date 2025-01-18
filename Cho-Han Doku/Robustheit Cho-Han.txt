@@ -1,0 +1,27 @@
+Die Robustheit von Cho-Han:
+
+-Sämtliche Eingaben vom Spieler wurden getestet.
+Darunter fällt:
+falsche Eingaben vom Spieler
+Bei 0 Punkten auf dem Account kann der Spieler nur noch zuschauen und verlassen
+(im seltenen Fall, wenn der Spieler schon gewttet hat und bei der Eingabe der nächsten Wette seine Punkte auf 0 akutalisert werden, dann bleibt der Spieler nicht mehr im Dialog hängen,
+sondern wird darauf hingewiesen)
+
+-Die Lobby wird korrekt geschlossen,wenn es keine Spieler mehr in der Lobby gibt.
+
+-Bei der Überschreitung der maximalen Spieleranzahl in der Lobby wird automatisch eine neue Lobby erstellt.
+
+-Wenn sich ein Spieler mit einem Account, der schon auf dem Server spielt, anmelden will, dann wird der Spieler vom Server darauf hingewiesen und kommt wieder ins Anfangsmenü
+
+-Verbindungsabbrüche auf Server Seite => bei kurzen Abbrüchen ist jeder Spieler noch drinnen und bei langen Abbrüchen verliert jeder die Verbindung zum Server.
+Der Server ist Dabei in der Lage wieder neue Verbindungen aufzunehmen 
+
+-Verbindungsabbrüche auf Client Seite => bei kurzen Abbruch ist der Spieler noch in der Lobby. Bei langen Abbruch fliegt der Spieler vom Server und der Spieler kommt zum Login Screen.
+Der Spieler kann sich wieder mit dem Server verbinden
+
+-Spieler versucht sich zu verbinden, obwohl der Server gar nicht angeschaltet ist. Der Spieler kommt wieder ins Anfangsmenü
+
+-Wenn ein Spieler den Server(Lobby) verlässt oder der Spieler durch Verbindugsabbrüche die Verbindung zum Server verliert,
+dann wird der verwendete Port des Servers wieder korrekt freigegeben und ein anderer Spieler kann diesen Port benutzen.
+
+

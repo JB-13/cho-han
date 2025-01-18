@@ -1,92 +1,169 @@
 package networkControllerServer;
 
+import gameLogic.Lobby;
 import gameLogic.Player;
+
 import networkControllerServer.marshalling.TCPReceive;
 import networkControllerServer.marshalling.TCPSend;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 
 import static gameLogic.Lobby.assignLobby;
 
 public class TCPServer implements Runnable {
+    private int port;
+    private  TCPSend tcpSend;
+    private  TCPReceive tcpRec;
+    private  ServerSocket socket;
+    private Socket connection;
+    private boolean active = false;
 
-    public static TCPSend tcpSend  = null;
-    public static TCPReceive tcpRec  = null;
-    public static Socket socket = null;
+    public TCPServer(int port) {
+        this.port = port;
+    }
 
     @Override
     public void run() {
-        int port = 1234;
 
+        try {
 
-        try (ServerSocket socket = new ServerSocket(port)) {
 
             while (true) {
-                System.out.println("Server hört auf TCP-Port: " + socket.getLocalPort ());
-                System.out.println("Warten auf Verbindungsaufbau");
-                try (Socket connection = socket.accept();
-                     InputStream in = connection.getInputStream();
-                     OutputStream out = connection.getOutputStream()) {
+                socket = new ServerSocket(port, 50, InetAddress.getByName("0.0.0.0"));
+                socket.setReuseAddress(true);
 
-                    System.out.println("Verbindungsaufbau hat stattgefunden");
 
+                System.out.println("Server is listening on TCP-Port: " + socket.getLocalPort());
+                System.out.println("Waiting for connection to be established");
+
+                Player player = null;
+                try  {
+                    connection = socket.accept();//hier wird gewartet
+                    InputStream in = connection.getInputStream();
+                    OutputStream out = connection.getOutputStream();
+
+                    System.out.println("Connection has been established");
                     tcpRec = new TCPReceive(in);
                     tcpSend = new TCPSend(out);
 
+                    connection.setSoTimeout(30000);
+                    // Warten auf Login-Daten
+
+                    player = null;
+                    try {
+                        String response = tcpRec.receiveCode();
+                        if (!response.equals("CON")) {
+                            System.out.println("Invalid request from client. Connection is closed.");
+                            continue;
+                        }
+
+                        tcpSend.sendCode("ACK");
+
+
+                        HandleRequestFromClient handler = HandleRequestFromClient.handleLogReg(this); //hier wird der Login empfangen
+                        // Spieler-Objekt wurde erfolgreich erstellt, gehe zur Lobby-Zuweisung
+                        if (handler == null) {
+                            System.err.println("Error creating player object. Connection is closed");
+                            connection.close();
+                            socket.close();
+                            continue;
+                        }
+
+                        player = handler.getPlayer();
+                        player.setTCPServer(this);
+                        tcpSend.sendCode("CBA");
+                        tcpSend.sendDouble(player.getBalance()); //sende Information an Client, wie viel guthaben er hat
+                        Thread keepalive = new Thread(new KeepAlive((this)));
+                        keepalive.start();
+                        assignLobby(player); // Füge den Spieler zur Lobby hinzu
+                        active= true;
+
+                        while (active) {
+                            handler.handleRequest(player.getServer());  // Verarbeite Anforderungen des Spielers
+                        }
+
+
+                    }  catch (IOException e) {
+                        System.err.println("Connection to Client lost: " + e.getMessage());
+                        Lobby.removePlayerFromLobby(player);
+                        connection.close();
+                        socket.close();
+                    } catch (Exception e) {
+                        System.err.println("An unexpected error occurred: " + e.getMessage());
+                        Lobby.removePlayerFromLobby(player);
+                        connection.close();
+                        socket.close();
+                    }
+
                 } catch (IOException e) {
-                    System.err.println("Fehler bei der Verarbeitung der Verbindung: " + e.getMessage());
-                    e.printStackTrace();
+                    System.err.println("Error processing connection: " + e.getMessage());
+                    Lobby.removePlayerFromLobby(player);
+                    connection.close();
+                    socket.close();
                 }
+
             }
         } catch (IOException e) {
-            System.err.println("Fehler beim Starten des Servers: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Error starting server: " + e.getMessage());
         }
     }
 
-    public static void main(String[] args) throws Exception {
+    public TCPReceive getTcpRec() {
+        return tcpRec;
+    }
 
-        int port = 1234;
-        ServerSocket socket = new ServerSocket (port);
-        System.out.println ("Server hört auf TCP-Port: " + socket.getLocalPort ());
-        System.out.println ("Warten auf Verbindungsaufbau");
+    public TCPSend getTcpSend() {
+        return tcpSend;
+    }
 
-        Socket connection = socket.accept ();
-
-        InputStream in = connection.getInputStream();
-        OutputStream out = connection.getOutputStream();
-        System.out.println ("Verbindungsaufbau hat statt gefunden");
-        tcpRec = new TCPReceive (in);
-        tcpSend = new TCPSend (out);
-
-        Player p1 = new Player("jan1", "1234");
-        assignLobby(p1);
-
-        HandleRequestFromClient handler = new HandleRequestFromClient(p1);
-        while (true){
-            handler.handleRequest();
-            Thread.sleep(3000);
-
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+    public void closeConnection() {
+        try {
+            this.connection.close();
+            socket.close();
+        } catch (IOException e) {
+            System.err.println("Error closing connection: " + e.getMessage());
         }
-
-
-
-
-
-/*        System.out.println(tcpRec.receiveCode());
-        System.out.println(tcpRec.receiveDouble());
-        System.out.println(tcpRec.receiveInt());
-        System.out.println(tcpRec.receiveString());*/
-/*        connection.close ();
-        socket.close ();*/
-
 
     }
 
 
 }
+
+//KeepAlive zum konstanten Überprüfen der Verbindung
+class KeepAlive implements Runnable{
+    private TCPServer server;
+    public KeepAlive(TCPServer server) {
+        this.server = server;
+    }
+    @Override
+    public void run() {
+        try {
+            while (!Thread.currentThread().isInterrupted()) {
+                server.getTcpSend().sendCode("ALI");
+                Thread.sleep(2000);
+
+
+            }
+        } catch (IOException e) {
+            System.err.println("Lost connection to Client: " + e.getMessage());
+        } catch (InterruptedException e) {
+            System.err.println("KeepAlive thread was interrupted: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("An unexpected error occurred in the KeepAlive thread: " + e.getMessage());
+        } finally {
+            System.out.println("KeepAlive-Thread ended.");
+            Thread.currentThread().interrupt();
+        }
+    }
+
+}
+
+
