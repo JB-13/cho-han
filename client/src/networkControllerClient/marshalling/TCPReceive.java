@@ -6,31 +6,11 @@ import java.nio.ByteBuffer;
 public class TCPReceive {
 
     InputStream in = null;
-    byte [] buffer;
-    ByteBuffer bbuf;
-    int bufferLength = 256;
 
     public TCPReceive (InputStream in) {
         this.in = in;
-       // buffer = new byte [bufferLength];
-       // bbuf = ByteBuffer.wrap(buffer);
+
     } // TCP_Receive
-
-
-
-/*    private void fillBuffer(int size) throws Exception {
-        bbuf.clear();
-        int bytesRead = 0;
-        while (bytesRead < size) {
-            int result = in.read(buffer, bytesRead, size - bytesRead);
-            if (result == -1) {
-                throw new Exception("End of stream reached");
-            }
-            bytesRead += result;
-        }
-        bbuf.flip();
-    }*/
-
 
 
     public int receiveInt ( ) throws Exception {

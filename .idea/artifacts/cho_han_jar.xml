@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="cho-han:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/cho_han_jar</output-path>
+    <root id="archive" name="cho-han.jar">
+      <element id="module-output" name="cho-han" />
+    </root>
+  </artifact>
+</component>

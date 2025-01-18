@@ -1,5 +1,6 @@
 package networkControllerClient.marshalling;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
@@ -47,7 +48,7 @@ public class TCPSend {
 
     public void sendCode(String code) throws Exception {
         if (code.length() != 3) {
-            throw new IllegalArgumentException("Code muss genau 3 Zeichen lang sein.");
+            throw new IllegalArgumentException("Code must be exactly 3 characters long.");
         }
         if (bbuf.position() > 0 || bbuf.limit() > 0) {
             bbuf.clear();
@@ -57,10 +58,18 @@ public class TCPSend {
         writeBuffer();
     }
 
-    private void writeBuffer() throws Exception {
+    private void writeBuffer()  {
         while (bbuf.hasRemaining()) {
-            out.write(bbuf.get());
+            try {
+                out.write(bbuf.get());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
-        out.flush();
+        try {
+            out.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

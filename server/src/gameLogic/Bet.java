@@ -1,6 +1,9 @@
 package gameLogic;
 
-public class Bet {
+import java.io.Serializable;
+
+public class Bet implements Serializable {
+    private static final long serialVersionUID = 1L;
     private double amount = 0.0;
     private boolean even = false;
     private boolean odd = false ;
