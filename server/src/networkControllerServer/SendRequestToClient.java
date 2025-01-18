@@ -33,11 +33,16 @@ public class SendRequestToClient {
 }
 
 
-/*Server Actions
+/*
+Server Actions
 ===========================
 is odd: IOD
 is even: IEV
 is number: INU | 2-12(int)
-new balance: BAL | amount (double)
-===========================*/
+new balance: BAL | amount (double) (specific for end of round outcome)
+current balance: CBA | amount (double)
+Lobby too full: ERR
+keep Alive Messages: ALI
+===========================
+*/
 

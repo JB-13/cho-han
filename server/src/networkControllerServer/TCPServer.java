@@ -2,8 +2,7 @@ package networkControllerServer;
 
 import gameLogic.Lobby;
 import gameLogic.Player;
-import networkControllerClient.HandleRequestFromServer;
-import networkControllerClient.TCPClient;
+
 import networkControllerServer.marshalling.TCPReceive;
 import networkControllerServer.marshalling.TCPSend;
 
@@ -32,15 +31,12 @@ public class TCPServer implements Runnable {
     public void run() {
 
         try {
-/*            socket = new ServerSocket(port, 50, InetAddress.getByName("0.0.0.0"));
-            socket.setReuseAddress(true);*/
+
 
             while (true) {
                 socket = new ServerSocket(port, 50, InetAddress.getByName("0.0.0.0"));
                 socket.setReuseAddress(true);
-/*                if (socket.isClosed()){
-                    socket = new ServerSocket(port);
-                }*/
+
 
                 System.out.println("Server is listening on TCP-Port: " + socket.getLocalPort());
                 System.out.println("Waiting for connection to be established");
@@ -81,7 +77,7 @@ public class TCPServer implements Runnable {
                         player = handler.getPlayer();
                         player.setTCPServer(this);
                         tcpSend.sendCode("CBA");
-                        tcpSend.sendDouble(player.getBalance()); //sende Information an Client, wie vieln guthaben er hat
+                        tcpSend.sendDouble(player.getBalance()); //sende Information an Client, wie viel guthaben er hat
                         Thread keepalive = new Thread(new KeepAlive((this)));
                         keepalive.start();
                         assignLobby(player); // Füge den Spieler zur Lobby hinzu
@@ -92,11 +88,7 @@ public class TCPServer implements Runnable {
                         }
 
 
-                    } /* catch (IllegalArgumentException e) {
-                       // System.out.println("Login fehlgeschlagen für: " + handler.getPlayer());
-                        tcpSend.sendString("Login fehlgeschlagen: " + e.getMessage());
-                    }
-                    */ catch (IOException e) {
+                    }  catch (IOException e) {
                         System.err.println("Connection to Client lost: " + e.getMessage());
                         Lobby.removePlayerFromLobby(player);
                         connection.close();

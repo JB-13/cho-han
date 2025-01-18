@@ -119,7 +119,7 @@ public class Lobby implements Runnable {
         System.out.println("LobbyNr: " + getId());
         int number = dealer.rollDice();
         for (Player player : players) {
-            // System.out.println(player.getName());
+
             Bet bet = player.getBet();
 
 
@@ -143,14 +143,12 @@ public class Lobby implements Runnable {
                 player.updateBalance(bet.getAmount());
                 System.out.println("Player: " + player.getName() + " with odd bet: " + bet.getAmount() + " and balance: " + player.getBalance());
 
-                // System.out.println("check die number");
 
             } else if (bet.getNumber() == number) {
                 // Spieler gewinnt bei spezifischer Augenzahl, erhält doppelten Gewinn
                 player.updateBalance(bet.getAmount() * 3);
                 System.out.println("Player: " + player.getName() + " with num " + bet.getNumber() + " bet: " + bet.getAmount() + " and balance: " + player.getBalance());
 
-                // System.out.println("check die number");
 
             } else {
                 // Spieler verliert, Einsatz wird abgezogen
@@ -160,10 +158,8 @@ public class Lobby implements Runnable {
 
             player.skipRound(); // nach dem Wetten soll der Player auf den Default gesetzt werden
 
-            // System.out.println("vor dem Try Block");
             // Ergebnisse an den Spieler senden
             try {
-                // System.out.println("information wird an spieler gesendet");
                 sender.sendRoundOutcome(player, number);
             } catch (Exception e) {
                 System.out.println("Error sending results to players " + player.getName());
@@ -179,15 +175,11 @@ public class Lobby implements Runnable {
                 startGame();
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
-                // System.out.println("Lobby was interrupted");
                 Thread.currentThread().interrupt();
 
             }
         }
     }
 
-    public void stopLobby() {
-        active = false;
-    }
 
 }

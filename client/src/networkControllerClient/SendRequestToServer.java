@@ -12,8 +12,6 @@ public class SendRequestToServer {
     public static TCPClient tcpClient = new TCPClient();
     public static KeepAlive keepAlive = new KeepAlive();
     public static boolean connectToServer(){ //boolean weil, man wissen soll, ob es geklappt hat
-/*        Thread thread = new Thread(tcpClient);
-        thread.start();*/
 
         try {
             if (tcpClient.connect()){
@@ -21,7 +19,6 @@ public class SendRequestToServer {
             } else {
                 return false;
             }
-            //keepAlive.startGameHandlerThread(); //nach erfolgreichem connect, wird der keepAlive thread gestartet
         } catch (Exception e) {
             System.err.println("Error connecting to server: " + e.getMessage());
             return false;
@@ -311,7 +308,7 @@ public class SendRequestToServer {
             System.err.println("Error sending to Server: " + e.getMessage());
             Client.setGameloop(false);
         }
-        //   HandleRequestFromServer.handleRoundOutcome();
+
 
     }
 
@@ -344,9 +341,16 @@ connect to server: CON
 
 Player Action (on server)
 ===========================
+login: LOG | username (string) | password(string)
+confirm connection: ACK
+keep Alive Messages: ALI
 odd: ODD | amount (double)
 even: EVE | amount (double)
 bet number: NUM | amount (double) | 2-12(int)
 skip: SKI
 quit: from sever QUI
-===========================*/
+===========================
+
+
+
+*/

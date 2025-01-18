@@ -5,9 +5,6 @@ import database.UserDatabase;
 import gameLogic.Lobby;
 import gameLogic.Player;
 
-import java.io.IOException;
-
-import static gameLogic.Lobby.assignLobby;
 
 
 public class HandleRequestFromClient {
@@ -17,7 +14,6 @@ public class HandleRequestFromClient {
 
     public HandleRequestFromClient(String username){
         this.player = UserDatabase.getPlayer(username);
-        //assignLobby(player); // Spieler einer Lobby zuweisen (wird bereits in TCPServer getan
     }
 
     public Player getPlayer() {
@@ -102,9 +98,13 @@ connect to server: CON
 
 Player Action (on server)
 ===========================
+login: LOG | username (string) | password(string)
+confirm connection: ACK
+keep Alive Messages: ALI
 odd: ODD | amount (double)
 even: EVE | amount (double)
 bet number: NUM | amount (double) | 2-12(int)
 skip: SKI
 quit: from sever QUI
-===========================*/
+===========================
+*/

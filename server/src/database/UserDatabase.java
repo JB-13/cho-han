@@ -82,32 +82,6 @@ public class UserDatabase {
             e.printStackTrace();
         }
     }
-/*
-    // Benutzer laden
-    public static void loadUsers() {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(FILE_PATH), StandardCharsets.UTF_8))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(";");
-                if (parts.length == 3) {
-                    String username = parts[0];
-                    String password = parts[1];
-                    double balance = Double.parseDouble(parts[2]);
-                    users.put(username, new Player(username, password, balance));
-                } else {
-                    System.err.println("Ungültige Zeile in der Datei: " + line);
-                }
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("Keine Benutzerdaten gefunden, neue Datenbank wird erstellt.");
-            users = new HashMap<>();
-        } catch (IOException e) {
-            System.err.println("Fehler beim Laden der Benutzer: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
- */
 
     // Benutzer ausgeben (Debugging-Zwecke)
     public static void printUsers() {

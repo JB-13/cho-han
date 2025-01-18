@@ -50,9 +50,8 @@ public class Client {
     //Menü für den Client
     public static void gameLoopView(){
         gameloop = true; //setze auf true falls nicht geschehen
-        // if methoden aufruf zum connecten = true
-        // else retrun;
-        try {
+
+        try { //main thread schlafen legen für synchronisation
             Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

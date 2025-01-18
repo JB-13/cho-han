@@ -14,8 +14,6 @@ public class Server {
 
 
         ExecutorService executor = Executors.newFixedThreadPool(50);
-       // executor.execute(server);
-       //Anzahl an Ports
        for (int i = 50000; i < 50050; i++) {
             executor.submit(new TCPServer(i));
 
