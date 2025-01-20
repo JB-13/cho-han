@@ -6,6 +6,12 @@ Cho Han ist ein Glücks-Würfelspiel aus Japan
 
 Die ganze Dokumentation ist in dem Cho-Han Doku Ordner
 
+## Installation 
+
+1. Repository clonen
+2. Run Configuration Server: connection.Server
+3. Run Configuration Client: connection.Client    Modify options -> allow multiple instances
+
 ## Regeln
 
 Die Teilnehmer wetten auf die Augenzahl der 2 Würfel, dabei kann man entweder auf eine 
@@ -14,12 +20,6 @@ gerade Würfelzahl, eine ungerade Würfelzahl oder auf eine exakte Würfelzahl, 
 Einsatz und noch mehr zurück, je nachdem auf was man gewettet hat (beim Wetten auf 
 eine genaue Zahl bekommt man natürlich mehr zurück), ansonsten verliert man seinen 
 Einsatz. 
-
-## Installation 
-
-1. Repository clonen
-2. Run Configuration Server: connection.Server
-3. Run Configuration Client: connection.Client    Modify options -> allow multiple instances
 
 ## User Guide
 
@@ -35,11 +35,11 @@ existiert zu dem Zeitpunkt keine geeignete Lobby wird eine neue Lobby erstellt. 
 bekommt dann seine aktuelle Balance zurückgegeben und eine Liste an 
 Auswahlmöglichkeiten:
 
-    1. Bet odd 
-    2. Bet Even 
-    3. Bet die count  
-    4. Skip round 
-    5. Exit lobby
+        1)Bet odd
+        2)Bet Even
+        3)Bet die count
+        4)Skip round
+        5)Exit lobby
 
 
 3. Bei bet odd/even/die count muss man anschließend seinen Betrag angeben mit dem 
