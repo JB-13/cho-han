@@ -10,7 +10,8 @@ Die ganze Dokumentation ist in dem Cho-Han Doku Ordner
 
 1. Repository clonen
 2. Run Configuration Server: connection.Server
-3. Run Configuration Client: connection.Client    Modify options -> allow multiple instances
+3. Run Configuration Client: connection.Client
+4. Bei Client Run Configuration: Modify options -> allow multiple instances
 
 ## Regeln
 
